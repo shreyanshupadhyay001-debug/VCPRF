@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact — VCPRF</title>
+  <meta name="description" content="Contact Veritas Centre for Policy Research Foundation — collaboration, research enquiries, and advisory requests."/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="shared.css"/>
+  <style>
+    .contact-info-card {
+      background: linear-gradient(145deg, #0d2040, #0B1F3A);
+      border: 1px solid rgba(200,169,81,.15);
+      border-radius: 3px;
+      padding: 36px;
+    }
+    .contact-form-card {
+      background: linear-gradient(145deg, #0d2040, #0B1F3A);
+      border: 1px solid rgba(200,169,81,.15);
+      border-radius: 3px;
+      padding: 40px;
+    }
+    .contact-detail {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    .contact-detail-icon {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(200,169,81,.3);
+      border-radius: 2px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      color: var(--gold);
+    }
+    .contact-detail-label {
+      font-family: 'Lato', sans-serif;
+      font-size: .6rem;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: rgba(200,169,81,.6);
+      margin-bottom: 4px;
+    }
+    .contact-detail a {
+      font-family: 'Lato', sans-serif;
+      font-size: .9rem;
+      color: rgba(230,235,245,.82);
+      text-decoration: none;
+      transition: color .3s;
+    }
+    .contact-detail a:hover { color: var(--gold); }
+    .form-group { margin-bottom: 18px; }
+    .form-btn {
+      width: 100%;
+      background: var(--gold);
+      color: var(--navy);
+      font-family: 'Lato', sans-serif;
+      font-weight: 700;
+      font-size: .76rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 14px;
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background .3s, transform .2s, box-shadow .3s;
+    }
+    .form-btn:hover {
+      background: var(--gold-light);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(200,169,81,.3);
+    }
+  </style>
+</head>
+<body>
+
+<div id="page-transition"><div class="pt-emblem">Satye Pratishitam Sodham</div></div>
+
+<!-- NAVBAR -->
+<nav id="vcprf-nav">
+  <div class="nav-top-line gold-divider"></div>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo" data-transition>
+      <img src="images/logo.png" alt="VCPRF Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="nav-logo-fallback" style="display:none;"><div class="logo-box"><span>V</span></div><div class="logo-text"><p>VCPRF</p><p>Policy Research</p></div></div>
+    </a>
+    <div class="nav-links">
+      <a href="index.html"        class="nav-link" data-page="index.html"        data-transition>Home</a>
+      <a href="about.html"        class="nav-link" data-page="about.html"        data-transition>About</a>
+      <a href="research.html"     class="nav-link" data-page="research.html"     data-transition>Research</a>
+      <a href="initiatives.html"  class="nav-link" data-page="initiatives.html"  data-transition>Initiatives</a>
+      <a href="publications.html" class="nav-link" data-page="publications.html" data-transition>Publications</a>
+      <a href="contact.html"      class="nav-link" data-page="contact.html"      data-transition>Contact</a>
+    </div>
+    <div class="nav-controls">
+      <button class="theme-btn"><svg class="icon-moon" width="15" height="15" fill="currentColor" viewBox="0 0 16 16"><path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/></svg><svg class="icon-sun" width="15" height="15" fill="currentColor" viewBox="0 0 16 16" style="display:none;"><path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707z"/></svg></button>
+      <a href="contact.html" class="btn-primary nav-cta" data-transition style="font-size:.7rem;padding:10px 20px;">Collaborate With Us</a>
+      <button class="hamburger-btn" id="hamburger-btn"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="index.html" class="nav-link" data-transition>Home</a><a href="about.html" class="nav-link" data-transition>About</a><a href="research.html" class="nav-link" data-transition>Research</a><a href="initiatives.html" class="nav-link" data-transition>Initiatives</a><a href="publications.html" class="nav-link" data-transition>Publications</a><a href="contact.html" class="nav-link" data-transition>Contact</a>
+    <a href="contact.html" class="btn-primary" data-transition style="text-align:center;margin-top:8px;">Collaborate With Us</a>
+  </div>
+</nav>
+
+<!-- INNER HERO -->
+<section class="inner-hero">
+  <div class="hero-grid-pattern"></div><div class="hero-radial"></div><div class="corner-fl tr"></div>
+  <div class="watermark">Connect</div>
+  <div class="inner-hero-content">
+    <div class="inner-hero-breadcrumb"><a href="index.html" data-transition>Home</a><span>›</span><span style="color:var(--gold);">Contact</span></div>
+    <h1 class="h-animate h-a1">Contact & Collaboration</h1>
+    <p class="sub wide h-animate h-a2">We welcome enquiries from researchers, institutions, policymakers, and organisations interested in collaboration, advisory, or research partnerships.</p>
+  </div>
+</section>
+
+<hr class="gold-hr"/>
+
+<!-- CONTACT MAIN -->
+<section style="background:var(--offwhite);">
+  <div class="section-wrap">
+    <div class="grid-2-3" style="gap:48px;align-items:start;">
+
+      <!-- LEFT: Info Card -->
+      <div class="reveal">
+        <div class="contact-info-card">
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:600;color:white;margin-bottom:28px;">Connect With VCPRF</h3>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon"><svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div>
+            <div><p class="contact-detail-label">Email</p><a href="mailto:veritascprf@gmail.com">veritascprf@gmail.com</a></div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon"><svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></div>
+            <div><p class="contact-detail-label">LinkedIn</p><a href="https://www.linkedin.com/company/veritas-centre-for-policy-research-foundation/" target="_blank" rel="noopener">Veritas Centre for Policy Research Foundation</a></div>
+          </div>
+
+          <div style="border-top:1px solid rgba(200,169,81,.1);margin-top:24px;padding-top:24px;">
+            <p style="font-family:'Lato',sans-serif;font-size:.8rem;color:rgba(200,210,230,.5);line-height:1.7;margin-bottom:16px;">We welcome enquiries regarding:</p>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="display:flex;align-items:center;gap:10px;"><span class="dot-gold"></span><span style="font-family:'Lato',sans-serif;font-size:.83rem;color:rgba(220,230,245,.65);">Research collaboration proposals</span></div>
+              <div style="display:flex;align-items:center;gap:10px;"><span class="dot-gold"></span><span style="font-family:'Lato',sans-serif;font-size:.83rem;color:rgba(220,230,245,.65);">Policy advisory engagements</span></div>
+              <div style="display:flex;align-items:center;gap:10px;"><span class="dot-gold"></span><span style="font-family:'Lato',sans-serif;font-size:.83rem;color:rgba(220,230,245,.65);">Institutional partnerships</span></div>
+              <div style="display:flex;align-items:center;gap:10px;"><span class="dot-gold"></span><span style="font-family:'Lato',sans-serif;font-size:.83rem;color:rgba(220,230,245,.65);">CSR & grant collaboration</span></div>
+              <div style="display:flex;align-items:center;gap:10px;"><span class="dot-gold"></span><span style="font-family:'Lato',sans-serif;font-size:.83rem;color:rgba(220,230,245,.65);">Fellowship applications</span></div>
+              <div style="display:flex;align-items:center;gap:10px;"><span class="dot-gold"></span><span style="font-family:'Lato',sans-serif;font-size:.83rem;color:rgba(220,230,245,.65);">Government & EOI projects</span></div>
+            </div>
+          </div>
+
+          <div style="border-top:1px solid rgba(200,169,81,.1);margin-top:28px;padding-top:24px;text-align:center;">
+            <p class="motto" style="font-size:.92rem;opacity:.72;">Satye Pratishitam Sodham</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Form Card -->
+      <div class="reveal reveal-d2">
+        <div class="contact-form-card">
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:600;color:white;margin-bottom:8px;">Send Us a Message</h3>
+          <p style="font-family:'Lato',sans-serif;font-size:.83rem;color:rgba(200,210,230,.45);margin-bottom:28px;">We respond to all enquiries within 3–5 working days.</p>
+
+          <!-- Web3Forms — exact access key preserved -->
+          <form action="https://api.web3forms.com/submit" method="POST">
+            <input type="hidden" name="access_key" value="c8dc555b-0522-4550-b1d6-6792e47df9b4"/>
+            <input type="hidden" name="subject" value="New Enquiry — VCPRF Website"/>
+            <input type="hidden" name="redirect" value="https://web3forms.com/success"/>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px;">
+              <div>
+                <label class="form-label">Full Name</label>
+                <input type="text" name="name" required placeholder="Your full name" class="form-input"/>
+              </div>
+              <div>
+                <label class="form-label">Email Address</label>
+                <input type="email" name="email" required placeholder="your@email.com" class="form-input"/>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Organisation / Institution</label>
+              <input type="text" name="organisation" placeholder="Your organisation (optional)" class="form-input"/>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Nature of Enquiry</label>
+              <select name="enquiry_type" class="form-input" style="cursor:pointer;">
+                <option value="" disabled selected style="background:#0d2040;">Select type…</option>
+                <option value="research_collaboration" style="background:#0d2040;">Research Collaboration</option>
+                <option value="policy_advisory" style="background:#0d2040;">Policy Advisory</option>
+                <option value="institutional_partnership" style="background:#0d2040;">Institutional Partnership</option>
+                <option value="csr_grants" style="background:#0d2040;">CSR / Grants</option>
+                <option value="fellowship" style="background:#0d2040;">Fellowship Enquiry</option>
+                <option value="government_eoi" style="background:#0d2040;">Government / EOI</option>
+                <option value="general" style="background:#0d2040;">General Enquiry</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Message</label>
+              <textarea name="message" required placeholder="Describe your inquiry, research interest, or collaboration proposal in detail…" class="form-input" style="min-height:130px;resize:vertical;"></textarea>
+            </div>
+
+            <button type="submit" class="form-btn">Submit Message</button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="vcprf-footer">
+  <div class="footer-top-line"></div>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand"><img src="images/logo.png" alt="VCPRF" style="height:36px;width:auto;opacity:.8;" onerror="this.style.display='none'"/><p class="org-name">Veritas Centre for Policy Research Foundation</p><p class="motto" style="font-size:.84rem;color:rgba(200,169,81,.6);">Satye Pratishitam Sodham</p><p class="org-desc">An emerging policy think tank dedicated to rigorous analysis, evidence-based governance, and institutional impact.</p></div>
+      <div><p class="footer-col-title">Quick Links</p><div class="footer-links"><a href="index.html" data-transition>Home</a><a href="about.html" data-transition>About VCPRF</a><a href="research.html" data-transition>Research</a><a href="initiatives.html" data-transition>Initiatives</a><a href="publications.html" data-transition>Publications</a><a href="contact.html" data-transition>Contact</a></div></div>
+      <div><p class="footer-col-title">Contact</p><div class="footer-contact-item"><svg width="14" height="14" fill="none" stroke="#5a6a7c" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg><a href="mailto:veritascprf@gmail.com">veritascprf@gmail.com</a></div><div class="footer-contact-item"><svg width="14" height="14" fill="#5a6a7c" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg><a href="https://www.linkedin.com/company/veritas-centre-for-policy-research-foundation/" target="_blank" rel="noopener">LinkedIn</a></div></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 Veritas Centre for Policy Research Foundation. All rights reserved.</p><p class="motto" style="font-size:.78rem;opacity:.45;">Satye Pratishitam Sodham</p></div>
+  </div>
+</footer>
+
+<script src="shared.js"></script>
+</body>
+</html>
