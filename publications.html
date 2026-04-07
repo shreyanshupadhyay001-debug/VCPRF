@@ -139,6 +139,120 @@
       </div>
 
     </div>
+    <!-- ================================================================
+     FEATURED PUBLICATION FULL (DARK PATTERNS)
+================================================================ -->
+<section style="padding:80px 0;background:white;">
+  <div class="section-wrap" style="max-width:900px;">
+
+    <div class="pub-card">
+
+      <div class="pub-type-icon">📘</div>
+
+      <h2 style="font-size:1.6rem;margin-bottom:10px;">
+        Guidelines for Prevention and Regulation of Dark Patterns, 2023
+      </h2>
+
+      <!-- META -->
+      <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:12px;">
+        <strong>Date:</strong> 07 April 2026 &nbsp; | &nbsp;
+        <strong>Category:</strong> Digital Governance · Consumer Protection · Tech Policy
+      </p>
+
+      <!-- ABSTRACT -->
+      <div style="margin-bottom:18px;">
+        <h4 style="margin-bottom:6px;">Abstract</h4>
+        <p style="font-size:.95rem;line-height:1.7;color:var(--text-body);">
+          This publication examines the emergence and regulation of “dark patterns” within
+          India’s digital economy. It analyses the legal framework established under the
+          2023 Guidelines and evaluates their applicability across digital platforms,
+          advertisers, and sellers. The study situates dark patterns within broader
+          concerns of consumer autonomy, informed consent, and ethical interface design,
+          offering a structured interpretation of regulatory intent and enforcement challenges.
+        </p>
+      </div>
+
+      <!-- KEYWORDS -->
+      <div style="margin-bottom:18px;">
+        <h4 style="margin-bottom:6px;">Keywords</h4>
+        <p style="font-size:.9rem;color:var(--text-muted);">
+          Dark Patterns, Consumer Protection, Digital Platforms, UI/UX Ethics,
+          E-Commerce Regulation, Digital Governance, India Policy
+        </p>
+      </div>
+
+      <!-- DESCRIPTION -->
+      <p style="font-size:.95rem;line-height:1.75;color:var(--text-body);margin-bottom:18px;">
+        The report provides a detailed breakdown of the thirteen recognised dark patterns,
+        including false urgency, basket sneaking, and subscription traps. It highlights
+        how these practices manipulate user decision-making and undermine market fairness.
+        By integrating legal analysis with practical examples, the study contributes to
+        ongoing discourse on platform accountability and regulatory design.
+      </p>
+
+      <!-- HIGHLIGHTS -->
+      <div style="margin-bottom:18px;">
+        <h4>Key Highlights</h4>
+        <ul style="padding-left:18px;font-size:.9rem;color:var(--text-muted);line-height:1.6;">
+          <li>Legal definition and scope of dark patterns</li>
+          <li>Applicability under Consumer Protection framework</li>
+          <li>Analysis of 13 recognised deceptive practices</li>
+          <li>Implications for platforms, advertisers, and sellers</li>
+        </ul>
+      </div>
+
+      <!-- BUTTONS -->
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px;">
+
+        <button onclick="openPDF()" class="btn-primary">
+          Preview PDF
+        </button>
+
+        <a href="https://drive.google.com/file/d/1nxkbSrmyTFGy1UjQNyOlIlZ18AAFPOmd/view?usp=sharing"
+           target="_blank"
+           class="btn-outline">
+           Download PDF
+        </a>
+
+      </div>
+
+      <!-- CITATION -->
+      <div style="background:var(--offwhite);padding:14px;border-radius:4px;">
+        <h4 style="margin-bottom:6px;">Citation (APA)</h4>
+        <p style="font-size:.85rem;color:var(--text-muted);line-height:1.6;">
+          Veritas Centre for Policy Research Foundation. (2026).
+          <em>Guidelines for Prevention and Regulation of Dark Patterns, 2023.</em>
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= PDF MODAL ================= -->
+<div id="pdfModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);z-index:9999;">
+  <div style="position:relative;width:90%;height:90%;margin:3% auto;background:white;border-radius:6px;overflow:hidden;">
+    
+    <button onclick="closePDF()" style="position:absolute;top:10px;right:15px;font-size:20px;background:none;border:none;cursor:pointer;">
+      ✖
+    </button>
+
+    <iframe src="https://drive.google.com/file/d/1nxkbSrmyTFGy1UjQNyOlIlZ18AAFPOmd/preview"
+            style="width:100%;height:100%;border:none;">
+    </iframe>
+
+  </div>
+</div>
+
+<script>
+function openPDF() {
+  document.getElementById('pdfModal').style.display = 'block';
+}
+function closePDF() {
+  document.getElementById('pdfModal').style.display = 'none';
+}
+</script>
   </div>
 </section>
 
