@@ -10,50 +10,232 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="shared.css"/>
+
   <style>
-    .pub-card {
+    /* ── Publication category cards ───────────────────────── */
+    .pub-cat-card {
       background: white;
       border: 1px solid rgba(200,169,81,.16);
-      border-top: 3px solid rgba(200,169,81,.4);
+      border-top: 3px solid rgba(200,169,81,.35);
       padding: 32px 28px;
       border-radius: 3px;
-      transition: all .3s ease;
+      transition: border-top-color .3s, box-shadow .3s, transform .3s;
     }
-    .pub-card:hover {
+    .pub-cat-card:hover {
       border-top-color: var(--gold);
-      box-shadow: 0 8px 28px rgba(11,31,58,.1);
-      transform: translateY(-2px);
+      box-shadow: 0 10px 32px rgba(11,31,58,.1);
+      transform: translateY(-3px);
     }
-    .dark .pub-card {
+    .dark .pub-cat-card {
       background: var(--navy-mid);
       border-color: rgba(200,169,81,.1);
+      border-top-color: rgba(200,169,81,.3);
     }
-    .dark .pub-card:hover {
-      box-shadow: 0 8px 28px rgba(0,0,0,.3);
+    .dark .pub-cat-card:hover {
+      box-shadow: 0 10px 32px rgba(0,0,0,.35);
     }
+
     .pub-type-icon {
       width: 48px; height: 48px;
-      background: rgba(200,169,81,.08);
+      background: rgba(200,169,81,.07);
       border: 1px solid rgba(200,169,81,.28);
       border-radius: 2px;
       display: flex; align-items: center; justify-content: center;
       color: var(--gold);
       margin-bottom: 20px;
     }
+
+    /* ── Featured publication card ────────────────────────── */
+    .featured-pub {
+      background: white;
+      border: 1px solid rgba(200,169,81,.2);
+      border-left: 4px solid var(--gold);
+      border-radius: 3px;
+      overflow: hidden;
+      transition: box-shadow .3s;
+    }
+    .featured-pub:hover {
+      box-shadow: 0 12px 40px rgba(11,31,58,.1);
+    }
+    .dark .featured-pub {
+      background: var(--navy-mid);
+      border-color: rgba(200,169,81,.15);
+      border-left-color: var(--gold);
+    }
+
+    .pub-status-bar {
+      background: linear-gradient(135deg, #0d2040 0%, #0B1F3A 100%);
+      padding: 14px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      border-bottom: 1px solid rgba(200,169,81,.12);
+    }
+
+    .tag-pill {
+      display: inline-flex;
+      align-items: center;
+      font-family: 'Lato', sans-serif;
+      font-size: .6rem;
+      font-weight: 700;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(200,169,81,.1);
+      color: var(--gold);
+      border: 1px solid rgba(200,169,81,.22);
+      margin: 2px 3px 2px 0;
+    }
+
+    .pub-block {
+      padding: 10px 0 20px;
+      border-bottom: 1px solid rgba(200,169,81,.1);
+      margin-bottom: 4px;
+    }
+    .pub-block:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .pub-block-label {
+      font-family: 'Lato', sans-serif;
+      font-size: .6rem;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: rgba(200,169,81,.7);
+      margin-bottom: 10px;
+    }
+
+    .citation-box {
+      background: rgba(200,169,81,.04);
+      border: 1px solid rgba(200,169,81,.14);
+      border-radius: 2px;
+      padding: 16px 18px;
+    }
+    .dark .citation-box {
+      background: rgba(255,255,255,.03);
+    }
+
+    /* sidebar sticky only on large screens */
+    @media (min-width: 1024px) {
+      .pub-sidebar { position: sticky; top: 88px; }
+    }
+
+    /* responsive 2-col inside featured pub */
+    .fp-grid {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 40px;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .fp-grid { grid-template-columns: 1fr; }
+      .pub-sidebar { position: static; }
+    }
+
+    /* title/meta row */
+    .fp-title-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: start;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 600px) {
+      .fp-title-row { grid-template-columns: 1fr; }
+      .fp-doc-icon  { display: none; }
+      .pub-status-bar { padding: 12px 20px; }
+      .featured-pub-body { padding: 24px 20px !important; }
+    }
+
+    /* PDF Modal */
+    #pdfModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.82);
+      z-index: 9998;
+      align-items: center;
+      justify-content: center;
+    }
+    #pdfModal.open { display: flex; }
+
+    .modal-inner {
+      position: relative;
+      width: 92vw;
+      height: 90vh;
+      max-width: 1100px;
+      background: #0B1F3A;
+      border: 1px solid rgba(200,169,81,.2);
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(200,169,81,.15);
+      flex-shrink: 0;
+    }
+    .modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: .9rem;
+      font-weight: 600;
+      color: white;
+      line-height: 1.3;
+    }
+    .modal-close {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: 1px solid rgba(200,169,81,.3);
+      background: transparent;
+      color: var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-left: 16px;
+      transition: background .25s;
+    }
+    .modal-close:hover { background: rgba(200,169,81,.12); }
+    .modal-inner iframe {
+      flex: 1;
+      width: 100%;
+      border: none;
+    }
   </style>
 </head>
 <body>
 
-<div id="page-transition"><div class="pt-emblem">Satye Pratishitam Sodham</div></div>
+<!-- PAGE TRANSITION OVERLAY -->
+<div id="page-transition">
+  <div class="pt-emblem">Satye Pratishitam Sodham</div>
+</div>
 
-<!-- NAVBAR -->
+
+<!-- ================================================================
+     NAVBAR
+================================================================ -->
 <nav id="vcprf-nav">
   <div class="nav-top-line gold-divider"></div>
   <div class="nav-inner">
+
     <a href="index.html" class="nav-logo" data-transition>
-      <img src="logo.png" alt="VCPRF Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-      <div class="nav-logo-fallback" style="display:none;"><div class="logo-box"><span>V</span></div><div class="logo-text"><p>VCPRF</p><p>Policy Research</p></div></div>
+      <img src="images/logo.png" alt="VCPRF Logo"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="nav-logo-fallback" style="display:none;">
+        <div class="logo-box"><span>V</span></div>
+        <div class="logo-text"><p>VCPRF</p><p>Policy Research</p></div>
+      </div>
     </a>
+
     <div class="nav-links">
       <a href="index.html"        class="nav-link" data-page="index.html"        data-transition>Home</a>
       <a href="about.html"        class="nav-link" data-page="about.html"        data-transition>About</a>
@@ -62,34 +244,66 @@
       <a href="publications.html" class="nav-link" data-page="publications.html" data-transition>Publications</a>
       <a href="contact.html"      class="nav-link" data-page="contact.html"      data-transition>Contact</a>
     </div>
+
     <div class="nav-controls">
-      <button class="theme-btn"><svg class="icon-moon" width="15" height="15" fill="currentColor" viewBox="0 0 16 16"><path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/></svg><svg class="icon-sun" width="15" height="15" fill="currentColor" viewBox="0 0 16 16" style="display:none;"><path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707z"/></svg></button>
+      <button class="theme-btn" aria-label="Toggle dark mode">
+        <svg class="icon-moon" width="15" height="15" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/>
+        </svg>
+        <svg class="icon-sun" width="15" height="15" fill="currentColor" viewBox="0 0 16 16" style="display:none;">
+          <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707z"/>
+        </svg>
+      </button>
       <a href="contact.html" class="btn-primary nav-cta" data-transition style="font-size:.7rem;padding:10px 20px;">Collaborate With Us</a>
-      <button class="hamburger-btn" id="hamburger-btn"><span></span><span></span><span></span></button>
+      <button class="hamburger-btn" id="hamburger-btn" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </div>
+
   <div class="mobile-menu" id="mobile-menu">
-    <a href="index.html" class="nav-link" data-transition>Home</a><a href="about.html" class="nav-link" data-transition>About</a><a href="research.html" class="nav-link" data-transition>Research</a><a href="initiatives.html" class="nav-link" data-transition>Initiatives</a><a href="publications.html" class="nav-link" data-transition>Publications</a><a href="contact.html" class="nav-link" data-transition>Contact</a>
+    <a href="index.html"        class="nav-link" data-transition>Home</a>
+    <a href="about.html"        class="nav-link" data-transition>About</a>
+    <a href="research.html"     class="nav-link" data-transition>Research</a>
+    <a href="initiatives.html"  class="nav-link" data-transition>Initiatives</a>
+    <a href="publications.html" class="nav-link" data-transition>Publications</a>
+    <a href="contact.html"      class="nav-link" data-transition>Contact</a>
     <a href="contact.html" class="btn-primary" data-transition style="text-align:center;margin-top:8px;">Collaborate With Us</a>
   </div>
 </nav>
 
-<!-- INNER HERO -->
+
+<!-- ================================================================
+     INNER HERO
+================================================================ -->
 <section class="inner-hero">
-  <div class="hero-grid-pattern"></div><div class="hero-radial"></div><div class="corner-fl tr"></div>
+  <div class="hero-grid-pattern"></div>
+  <div class="hero-radial"></div>
+  <div class="corner-fl tr"></div>
   <div class="watermark">Works</div>
+
   <div class="inner-hero-content">
-    <div class="inner-hero-breadcrumb"><a href="index.html" data-transition>Home</a><span>›</span><span style="color:var(--gold);">Publications</span></div>
-    <h1 class="h-animate h-a1">Publications & Scholarly Output</h1>
-    <p class="sub h-animate h-a2">VCPRF's publications programme is currently being developed. Forthcoming works will be listed here upon release.</p>
+    <div class="inner-hero-breadcrumb">
+      <a href="index.html" data-transition>Home</a>
+      <span>›</span>
+      <span style="color:var(--gold);">Publications</span>
+    </div>
+    <h1 class="h-animate h-a1">Publications &amp; Scholarly Output</h1>
+    <p class="sub wide h-animate h-a2">
+      Rigorous research outputs spanning policy papers, institutional reports, and peer-reviewed journals — advancing evidence-based governance discourse.
+    </p>
   </div>
 </section>
 
 <hr class="gold-hr"/>
 
-<!-- PUBLICATIONS GRID -->
+
+<!-- ================================================================
+     SECTION 1 — PUBLICATION CATEGORIES
+================================================================ -->
 <section style="background:var(--offwhite);">
   <div class="section-wrap">
+
     <div class="section-header reveal">
       <span class="section-label">Scholarly Output</span>
       <h2 style="margin-top:12px;">Publication Categories</h2>
@@ -99,189 +313,369 @@
 
     <div class="grid-3" style="gap:24px;">
 
-      <div class="pub-card reveal reveal-d1">
+      <!-- Policy Papers -->
+      <div class="pub-cat-card reveal reveal-d1">
         <div class="pub-type-icon">
-          <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+          </svg>
         </div>
         <span class="section-label" style="display:block;margin-bottom:10px;">Policy Papers</span>
-        <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:600;color:var(--navy);margin-bottom:12px;" class="dark:text-stone-200">Policy Papers</h3>
-        <p style="font-family:'Lato',sans-serif;font-size:.84rem;line-height:1.7;color:var(--text-muted);margin-bottom:20px;">Concise analytical papers addressing specific governance and policy questions. Aimed at practitioners, administrators, and legislators requiring structured, evidence-based guidance on contemporary issues.</p>
+        <h3 style="font-family:'Playfair Display',serif;font-size:1.18rem;font-weight:600;color:var(--navy);margin-bottom:12px;">Policy Papers</h3>
+        <p style="font-family:'Lato',sans-serif;font-size:.84rem;line-height:1.72;color:var(--text-muted);margin-bottom:20px;">
+          Concise analytical papers addressing specific governance and policy questions. Aimed at practitioners, administrators, and legislators requiring structured, evidence-based guidance on contemporary issues.
+        </p>
         <div style="border-top:1px solid rgba(200,169,81,.12);padding-top:18px;">
-          <p style="font-family:'Lato',sans-serif;font-size:.75rem;color:var(--text-muted);margin-bottom:10px;letter-spacing:.02em;">Typical length: 3,000–8,000 words</p>
-          <span class="status-badge badge-gold"><span class="dot-gold"></span>Coming Soon</span>
+          <p style="font-family:'Lato',sans-serif;font-size:.74rem;color:var(--text-muted);margin-bottom:10px;letter-spacing:.02em;">Typical length: 3,000 – 8,000 words</p>
+          <span class="status-badge badge-gold"><span class="dot-gold"></span>Available</span>
         </div>
       </div>
-      <div class="pub-card reveal reveal-d2">
+
+      <!-- Research Reports -->
+      <div class="pub-cat-card reveal reveal-d2">
         <div class="pub-type-icon">
-          <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
         </div>
         <span class="section-label" style="display:block;margin-bottom:10px;">Research Reports</span>
-        <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:600;color:var(--navy);margin-bottom:12px;" class="dark:text-stone-200">Research Reports</h3>
-        <p style="font-family:'Lato',sans-serif;font-size:.84rem;line-height:1.7;color:var(--text-muted);margin-bottom:20px;">Comprehensive reports on thematic areas of governance, institutional design, and regulatory reform. These in-depth studies provide sustained analysis suitable for academic and institutional reference.</p>
+        <h3 style="font-family:'Playfair Display',serif;font-size:1.18rem;font-weight:600;color:var(--navy);margin-bottom:12px;">Research Reports</h3>
+        <p style="font-family:'Lato',sans-serif;font-size:.84rem;line-height:1.72;color:var(--text-muted);margin-bottom:20px;">
+          Comprehensive reports on thematic areas of governance, institutional design, and regulatory reform. These in-depth studies provide sustained analysis suitable for academic and institutional reference.
+        </p>
         <div style="border-top:1px solid rgba(200,169,81,.12);padding-top:18px;">
-          <p style="font-family:'Lato',sans-serif;font-size:.75rem;color:var(--text-muted);margin-bottom:10px;letter-spacing:.02em;">Typical length: 15,000–40,000 words</p>
+          <p style="font-family:'Lato',sans-serif;font-size:.74rem;color:var(--text-muted);margin-bottom:10px;letter-spacing:.02em;">Typical length: 15,000 – 40,000 words</p>
           <span class="status-badge badge-muted">Under Development</span>
         </div>
       </div>
 
-      <div class="pub-card reveal reveal-d3">
+      <!-- Journals -->
+      <div class="pub-cat-card reveal reveal-d3">
         <div class="pub-type-icon">
-          <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
+          <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+          </svg>
         </div>
         <span class="section-label" style="display:block;margin-bottom:10px;">Journals</span>
-        <h3 style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:600;color:var(--navy);margin-bottom:12px;" class="dark:text-stone-200">Journals</h3>
-        <p style="font-family:'Lato',sans-serif;font-size:.84rem;line-height:1.7;color:var(--text-muted);margin-bottom:20px;">Peer-reviewed academic journals covering constitutional law, governance studies, and public policy. Published periodically, these journals provide a forum for rigorous scholarly contributions.</p>
+        <h3 style="font-family:'Playfair Display',serif;font-size:1.18rem;font-weight:600;color:var(--navy);margin-bottom:12px;">Journals</h3>
+        <p style="font-family:'Lato',sans-serif;font-size:.84rem;line-height:1.72;color:var(--text-muted);margin-bottom:20px;">
+          Peer-reviewed academic journals covering constitutional law, governance studies, and public policy. Published periodically, these journals provide a forum for rigorous scholarly contributions.
+        </p>
         <div style="border-top:1px solid rgba(200,169,81,.12);padding-top:18px;">
-          <p style="font-family:'Lato',sans-serif;font-size:.75rem;color:var(--text-muted);margin-bottom:10px;letter-spacing:.02em;">Periodic publication</p>
+          <p style="font-family:'Lato',sans-serif;font-size:.74rem;color:var(--text-muted);margin-bottom:10px;letter-spacing:.02em;">Periodic publication</p>
           <span class="status-badge badge-muted">To Be Released</span>
         </div>
       </div>
-    </div>
-<!-- ================================================================
-     FEATURED PUBLICATION FULL (DARK PATTERNS)
-================================================================ -->
-<section style="padding:80px 0;background:white;">
-  <div class="section-wrap" style="max-width:900px;">
-
-    <div class="pub-card">
-
-      <div class="pub-type-icon">📘</div>
-
-      <h2 style="font-size:1.6rem;margin-bottom:10px;">
-        Guidelines for Prevention and Regulation of Dark Patterns, 2023
-      </h2>
-
-      <!-- META -->
-      <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:12px;">
-        <strong>Date:</strong> 07 April 2026 &nbsp; | &nbsp;
-        <strong>Category:</strong> Digital Governance · Consumer Protection · Tech Policy
-      </p>
-
-      <!-- ABSTRACT -->
-      <div style="margin-bottom:18px;">
-        <h4 style="margin-bottom:6px;">Abstract</h4>
-        <p style="font-size:.95rem;line-height:1.7;color:var(--text-body);">
-          This publication examines the emergence and regulation of “dark patterns” within
-          India’s digital economy. It analyses the legal framework established under the
-          2023 Guidelines and evaluates their applicability across digital platforms,
-          advertisers, and sellers. The study situates dark patterns within broader
-          concerns of consumer autonomy, informed consent, and ethical interface design,
-          offering a structured interpretation of regulatory intent and enforcement challenges.
-        </p>
-      </div>
-
-      <!-- KEYWORDS -->
-      <div style="margin-bottom:18px;">
-        <h4 style="margin-bottom:6px;">Keywords</h4>
-        <p style="font-size:.9rem;color:var(--text-muted);">
-          Dark Patterns, Consumer Protection, Digital Platforms, UI/UX Ethics,
-          E-Commerce Regulation, Digital Governance, India Policy
-        </p>
-      </div>
-
-      <!-- DESCRIPTION -->
-      <p style="font-size:.95rem;line-height:1.75;color:var(--text-body);margin-bottom:18px;">
-        The report provides a detailed breakdown of the thirteen recognised dark patterns,
-        including false urgency, basket sneaking, and subscription traps. It highlights
-        how these practices manipulate user decision-making and undermine market fairness.
-        By integrating legal analysis with practical examples, the study contributes to
-        ongoing discourse on platform accountability and regulatory design.
-      </p>
-
-      <!-- HIGHLIGHTS -->
-      <div style="margin-bottom:18px;">
-        <h4>Key Highlights</h4>
-        <ul style="padding-left:18px;font-size:.9rem;color:var(--text-muted);line-height:1.6;">
-          <li>Legal definition and scope of dark patterns</li>
-          <li>Applicability under Consumer Protection framework</li>
-          <li>Analysis of 13 recognised deceptive practices</li>
-          <li>Implications for platforms, advertisers, and sellers</li>
-        </ul>
-      </div>
-
-      <!-- BUTTONS -->
-      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px;">
-
-        <button onclick="openPDF()" class="btn-primary">
-          Preview PDF
-        </button>
-
-        <a href="https://drive.google.com/file/d/1nxkbSrmyTFGy1UjQNyOlIlZ18AAFPOmd/view?usp=sharing"
-           target="_blank"
-           class="btn-outline">
-           Download PDF
-        </a>
-
-      </div>
-
-      <!-- CITATION -->
-      <div style="background:var(--offwhite);padding:14px;border-radius:4px;">
-        <h4 style="margin-bottom:6px;">Citation (APA)</h4>
-        <p style="font-size:.85rem;color:var(--text-muted);line-height:1.6;">
-          Veritas Centre for Policy Research Foundation. (2026).
-          <em>Guidelines for Prevention and Regulation of Dark Patterns, 2023.</em>
-        </p>
-      </div>
 
     </div>
-
-  </div>
-</section>
-
-<!-- ================= PDF MODAL ================= -->
-<div id="pdfModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);z-index:9999;">
-  <div style="position:relative;width:90%;height:90%;margin:3% auto;background:white;border-radius:6px;overflow:hidden;">
-    
-    <button onclick="closePDF()" style="position:absolute;top:10px;right:15px;font-size:20px;background:none;border:none;cursor:pointer;">
-      ✖
-    </button>
-
-    <iframe src="https://drive.google.com/file/d/1nxkbSrmyTFGy1UjQNyOlIlZ18AAFPOmd/preview"
-            style="width:100%;height:100%;border:none;">
-    </iframe>
-
-  </div>
-</div>
-
-<script>
-function openPDF() {
-  document.getElementById('pdfModal').style.display = 'block';
-}
-function closePDF() {
-  document.getElementById('pdfModal').style.display = 'none';
-}
-</script>
   </div>
 </section>
 
 <hr class="gold-hr"/>
 
-<!-- SUBSCRIBE / NOTIFY -->
+
+<!-- ================================================================
+     SECTION 2 — FEATURED PUBLICATION
+================================================================ -->
+<section style="background:var(--offwhite);">
+  <div class="section-wrap">
+
+    <div class="section-header reveal">
+      <span class="section-label">Featured Publication</span>
+      <h2 style="margin-top:12px;">Latest Release</h2>
+      <div class="gold-line-left"></div>
+      <p>An analysis of India's regulatory framework governing deceptive digital interface design.</p>
+    </div>
+
+    <div class="featured-pub reveal">
+
+      <!-- ── Status bar ── -->
+      <div class="pub-status-bar">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:7px;height:7px;border-radius:50%;background:var(--gold);"></div>
+          <span class="section-label" style="color:rgba(200,169,81,.7);">Policy Paper · Digital Governance</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+          <span class="tag-pill">Consumer Protection</span>
+          <span class="tag-pill">Tech Policy</span>
+          <span class="tag-pill">Digital Platforms</span>
+        </div>
+      </div>
+
+      <!-- ── Body ── -->
+      <div class="featured-pub-body" style="padding:36px 36px 32px;">
+
+        <!-- Title + doc icon -->
+        <div class="fp-title-row">
+          <div>
+            <h2 style="font-family:'Playfair Display',serif;font-size:clamp(1.3rem,2.5vw,1.75rem);font-weight:700;color:var(--navy);line-height:1.25;margin-bottom:14px;">
+              Guidelines for Prevention and Regulation of Dark Patterns, 2023
+            </h2>
+            <div style="display:flex;flex-wrap:wrap;gap:18px;font-family:'Lato',sans-serif;font-size:.77rem;color:var(--text-muted);">
+              <span style="display:flex;align-items:center;gap:6px;">
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                07 April 2026
+              </span>
+              <span style="display:flex;align-items:center;gap:6px;">
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+                Policy Paper
+              </span>
+              <span style="display:flex;align-items:center;gap:6px;">
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                Veritas Centre for Policy Research Foundation
+              </span>
+            </div>
+          </div>
+          <!-- Document visual icon -->
+          <div class="fp-doc-icon" style="width:60px;height:72px;background:linear-gradient(145deg,#0d2040,#0B1F3A);border:1px solid rgba(200,169,81,.22);border-radius:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="24" height="24" fill="none" stroke="var(--gold)" viewBox="0 0 24 24" style="opacity:.85;">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            <span style="font-family:'Lato',sans-serif;font-size:.5rem;font-weight:700;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-top:6px;">PDF</span>
+          </div>
+        </div>
+
+        <!-- Gold accent line -->
+        <div style="height:1px;background:linear-gradient(90deg,rgba(200,169,81,.5),transparent);margin-bottom:28px;"></div>
+
+        <!-- Two-column: content + sidebar -->
+        <div class="fp-grid">
+
+          <!-- LEFT: content blocks -->
+          <div>
+
+            <div class="pub-block">
+              <p class="pub-block-label">Abstract</p>
+              <p style="font-family:'EB Garamond',serif;font-size:1.05rem;line-height:1.85;color:var(--text-body);">
+                This publication examines the emergence and regulation of "dark patterns" within India's digital economy. It analyses the legal framework established under the 2023 Guidelines and evaluates their applicability across digital platforms, advertisers, and sellers. The study situates dark patterns within broader concerns of consumer autonomy, informed consent, and ethical interface design, offering a structured interpretation of regulatory intent and enforcement challenges.
+              </p>
+            </div>
+
+            <div class="pub-block">
+              <p class="pub-block-label">Overview</p>
+              <p style="font-family:'Lato',sans-serif;font-size:.88rem;line-height:1.82;color:var(--text-muted);">
+                The report provides a detailed breakdown of the thirteen recognised dark patterns — including false urgency, basket sneaking, drip pricing, and subscription traps. It highlights how these practices manipulate user decision-making and undermine market fairness. By integrating legal analysis with practical examples, the study contributes to ongoing discourse on platform accountability, regulatory design, and the future of digital consumer protection in India.
+              </p>
+            </div>
+
+            <div class="pub-block">
+              <p class="pub-block-label">Key Highlights</p>
+              <div style="display:flex;flex-direction:column;gap:10px;">
+                <div style="display:flex;align-items:flex-start;gap:10px;">
+                  <span class="check-box" style="margin-top:1px;"><svg width="8" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#C8A951" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  <span style="font-family:'Lato',sans-serif;font-size:.86rem;color:var(--text-muted);line-height:1.6;">Legal definition and scope of dark patterns under Indian law</span>
+                </div>
+                <div style="display:flex;align-items:flex-start;gap:10px;">
+                  <span class="check-box" style="margin-top:1px;"><svg width="8" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#C8A951" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  <span style="font-family:'Lato',sans-serif;font-size:.86rem;color:var(--text-muted);line-height:1.6;">Applicability under the Consumer Protection framework</span>
+                </div>
+                <div style="display:flex;align-items:flex-start;gap:10px;">
+                  <span class="check-box" style="margin-top:1px;"><svg width="8" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#C8A951" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  <span style="font-family:'Lato',sans-serif;font-size:.86rem;color:var(--text-muted);line-height:1.6;">Structured analysis of all 13 recognised deceptive practices</span>
+                </div>
+                <div style="display:flex;align-items:flex-start;gap:10px;">
+                  <span class="check-box" style="margin-top:1px;"><svg width="8" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#C8A951" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  <span style="font-family:'Lato',sans-serif;font-size:.86rem;color:var(--text-muted);line-height:1.6;">Regulatory implications for platforms, advertisers, and sellers</span>
+                </div>
+                <div style="display:flex;align-items:flex-start;gap:10px;">
+                  <span class="check-box" style="margin-top:1px;"><svg width="8" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#C8A951" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                  <span style="font-family:'Lato',sans-serif;font-size:.86rem;color:var(--text-muted);line-height:1.6;">Interface design ethics and consumer autonomy in digital markets</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="pub-block">
+              <p class="pub-block-label">Citation (APA)</p>
+              <div class="citation-box">
+                <p style="font-family:'EB Garamond',serif;font-size:.95rem;line-height:1.72;color:var(--text-muted);">
+                  Veritas Centre for Policy Research Foundation. (2026).
+                  <em>Guidelines for Prevention and Regulation of Dark Patterns, 2023.</em>
+                  VCPRF Policy Paper.
+                </p>
+              </div>
+            </div>
+
+          </div><!-- /left -->
+
+          <!-- RIGHT: sidebar -->
+          <div class="pub-sidebar" style="display:flex;flex-direction:column;gap:16px;">
+
+            <!-- Access buttons -->
+            <div style="background:linear-gradient(145deg,#0d2040,#0B1F3A);border:1px solid rgba(200,169,81,.15);border-radius:3px;padding:24px;">
+              <p style="font-family:'Lato',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,169,81,.65);margin-bottom:16px;">Access Document</p>
+              <div style="display:flex;flex-direction:column;gap:10px;">
+                <button id="previewBtn"
+                        style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:none;cursor:pointer;"
+                        class="btn-primary">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                  Preview PDF
+                </button>
+                <a href="https://drive.google.com/file/d/1nxkbSrmyTFGy1UjQNyOlIlZ18AAFPOmd/view?usp=sharing"
+                   target="_blank" rel="noopener"
+                   class="btn-outline"
+                   style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;box-sizing:border-box;">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                  Download PDF
+                </a>
+              </div>
+            </div>
+
+            <!-- Keywords -->
+            <div style="background:white;border:1px solid rgba(200,169,81,.16);border-radius:3px;padding:22px;">
+              <p style="font-family:'Lato',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,169,81,.65);margin-bottom:12px;">Keywords</p>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                <span class="tag-pill" style="background:rgba(200,169,81,.06);color:var(--text-muted);border-color:rgba(200,169,81,.18);">Dark Patterns</span>
+                <span class="tag-pill" style="background:rgba(200,169,81,.06);color:var(--text-muted);border-color:rgba(200,169,81,.18);">Consumer Protection</span>
+                <span class="tag-pill" style="background:rgba(200,169,81,.06);color:var(--text-muted);border-color:rgba(200,169,81,.18);">Digital Platforms</span>
+                <span class="tag-pill" style="background:rgba(200,169,81,.06);color:var(--text-muted);border-color:rgba(200,169,81,.18);">UI/UX Ethics</span>
+                <span class="tag-pill" style="background:rgba(200,169,81,.06);color:var(--text-muted);border-color:rgba(200,169,81,.18);">E-Commerce</span>
+                <span class="tag-pill" style="background:rgba(200,169,81,.06);color:var(--text-muted);border-color:rgba(200,169,81,.18);">Digital Governance</span>
+                <span class="tag-pill" style="background:rgba(200,169,81,.06);color:var(--text-muted);border-color:rgba(200,169,81,.18);">India Policy</span>
+              </div>
+            </div>
+
+            <!-- Publisher blurb -->
+            <div style="background:rgba(200,169,81,.04);border:1px solid rgba(200,169,81,.13);border-radius:3px;padding:20px;">
+              <p style="font-family:'Lato',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,169,81,.65);margin-bottom:10px;">Published By</p>
+              <p style="font-family:'Playfair Display',serif;font-size:.9rem;font-weight:600;color:var(--navy);margin-bottom:4px;">VCPRF</p>
+              <p class="motto" style="font-size:.78rem;opacity:.7;margin-bottom:8px;">Satye Pratishitam Sodham</p>
+              <p style="font-family:'Lato',sans-serif;font-size:.76rem;line-height:1.6;color:var(--text-muted);">Veritas Centre for Policy Research Foundation.</p>
+            </div>
+
+          </div><!-- /sidebar -->
+
+        </div><!-- /fp-grid -->
+      </div><!-- /featured-pub-body -->
+    </div><!-- /featured-pub -->
+
+  </div>
+</section>
+
+<hr class="gold-hr"/>
+
+
+<!-- ================================================================
+     SECTION 3 — STAY INFORMED (dark)
+================================================================ -->
 <section class="dark-section">
   <div class="dark-section-grid"></div>
   <div class="section-wrap tight">
     <div style="max-width:560px;position:relative;z-index:10;" class="reveal">
       <span class="section-label" style="color:rgba(200,169,81,.7);">Stay Informed</span>
-      <h2 style="color:white;margin-top:14px;font-size:clamp(1.6rem,2.8vw,2.2rem);">Receive Publications<br/>When They Launch</h2>
+      <h2 style="color:white;margin-top:14px;font-size:clamp(1.6rem,2.8vw,2.2rem);">
+        Receive Publications<br/>When They Launch
+      </h2>
       <div class="gold-line-left"></div>
-      <p style="font-family:'EB Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(255,255,255,.58);line-height:1.75;margin-bottom:28px;">To be notified when VCPRF publications are released, please contact us with your area of interest. We will ensure relevant outputs are shared with you directly.</p>
+      <p style="font-family:'EB Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(255,255,255,.58);line-height:1.75;margin-bottom:28px;">
+        To be notified when VCPRF publications are released, please contact us with your area of interest. We will ensure relevant outputs are shared with you directly.
+      </p>
       <a href="contact.html" class="btn-primary" data-transition>Contact VCPRF</a>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
+
+<!-- ================================================================
+     FOOTER
+================================================================ -->
 <footer id="vcprf-footer">
   <div class="footer-top-line"></div>
   <div class="footer-inner">
     <div class="footer-grid">
-      <div class="footer-brand"><img src="images/logo.png" alt="VCPRF" style="height:36px;width:auto;opacity:.8;" onerror="this.style.display='none'"/><p class="org-name">Veritas Centre for Policy Research Foundation</p><p class="motto" style="font-size:.84rem;color:rgba(200,169,81,.6);">Satye Pratishitam Sodham</p><p class="org-desc">An emerging policy think tank dedicated to rigorous analysis, evidence-based governance, and institutional impact.</p></div>
-      <div><p class="footer-col-title">Quick Links</p><div class="footer-links"><a href="index.html" data-transition>Home</a><a href="about.html" data-transition>About VCPRF</a><a href="research.html" data-transition>Research</a><a href="initiatives.html" data-transition>Initiatives</a><a href="publications.html" data-transition>Publications</a><a href="contact.html" data-transition>Contact</a></div></div>
-      <div><p class="footer-col-title">Contact</p><div class="footer-contact-item"><svg width="14" height="14" fill="none" stroke="#5a6a7c" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg><a href="mailto:veritascprf@gmail.com">veritascprf@gmail.com</a></div><div class="footer-contact-item"><svg width="14" height="14" fill="#5a6a7c" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg><a href="https://www.linkedin.com/company/veritas-centre-for-policy-research-foundation/" target="_blank" rel="noopener">LinkedIn</a></div></div>
+
+      <div class="footer-brand">
+        <img src="images/logo.png" alt="VCPRF" style="height:36px;width:auto;opacity:.8;" onerror="this.style.display='none'"/>
+        <p class="org-name">Veritas Centre for Policy Research Foundation</p>
+        <p class="motto" style="font-size:.84rem;color:rgba(200,169,81,.6);">Satye Pratishitam Sodham</p>
+        <p class="org-desc">An emerging policy think tank dedicated to rigorous analysis, evidence-based governance, and institutional impact.</p>
+      </div>
+
+      <div>
+        <p class="footer-col-title">Quick Links</p>
+        <div class="footer-links">
+          <a href="index.html"        data-transition>Home</a>
+          <a href="about.html"        data-transition>About VCPRF</a>
+          <a href="research.html"     data-transition>Research</a>
+          <a href="initiatives.html"  data-transition>Initiatives</a>
+          <a href="publications.html" data-transition>Publications</a>
+          <a href="contact.html"      data-transition>Contact</a>
+        </div>
+      </div>
+
+      <div>
+        <p class="footer-col-title">Contact</p>
+        <div class="footer-contact-item">
+          <svg width="14" height="14" fill="none" stroke="#5a6a7c" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+          </svg>
+          <a href="mailto:veritascprf@gmail.com">veritascprf@gmail.com</a>
+        </div>
+        <div class="footer-contact-item">
+          <svg width="14" height="14" fill="#5a6a7c" viewBox="0 0 24 24">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+          </svg>
+          <a href="https://www.linkedin.com/company/veritas-centre-for-policy-research-foundation/" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </div>
+
     </div>
-    <div class="footer-bottom"><p>© 2026 Veritas Centre for Policy Research Foundation. All rights reserved.</p><p class="motto" style="font-size:.78rem;opacity:.45;">Satye Pratishitam Sodham</p></div>
+    <div class="footer-bottom">
+      <p>© 2026 Veritas Centre for Policy Research Foundation. All rights reserved.</p>
+      <p class="motto" style="font-size:.78rem;opacity:.45;">Satye Pratishitam Sodham</p>
+    </div>
   </div>
 </footer>
+
+
+<!-- ================================================================
+     PDF PREVIEW MODAL
+================================================================ -->
+<div id="pdfModal" role="dialog" aria-modal="true" aria-label="PDF Preview">
+  <div class="modal-inner">
+    <div class="modal-header">
+      <span class="modal-title">Guidelines for Prevention and Regulation of Dark Patterns, 2023 — VCPRF</span>
+      <button class="modal-close" id="closeModal" aria-label="Close preview">&#x2715;</button>
+    </div>
+    <iframe
+      src="https://drive.google.com/file/d/1nxkbSrmyTFGy1UjQNyOlIlZ18AAFPOmd/preview"
+      allow="autoplay"
+      title="Dark Patterns Guidelines PDF Preview">
+    </iframe>
+  </div>
+</div>
+
+
+<!-- ================================================================
+     SCRIPTS
+================================================================ -->
+<script>
+  /* ── PDF Modal ─────────────────────────────────────────── */
+  const modal      = document.getElementById('pdfModal');
+  const previewBtn = document.getElementById('previewBtn');
+  const closeBtn   = document.getElementById('closeModal');
+
+  function openModal()  {
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  previewBtn.addEventListener('click', openModal);
+  closeBtn.addEventListener('click', closeModal);
+
+  /* Close on backdrop click */
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) closeModal();
+  });
+
+  /* Close on Escape */
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+  });
+</script>
 
 <script src="shared.js"></script>
 </body>
