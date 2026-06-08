@@ -292,7 +292,135 @@
 
 <hr class="gold-hr"/>
 
+<!-- ================================================================
+     INTERNSHIP PROGRAMME 2026
+================================================================ -->
+<section class="dark-section internship-section">
+  <div class="dark-section-grid"></div>
 
+  <div class="section-wrap">
+
+    <div class="section-header centered reveal">
+      <span class="section-label" style="color:rgba(200,169,81,.7);">
+        Internship Programme 2026
+      </span>
+
+      <h2 style="color:white;margin-top:12px;">
+        Call for Interns
+      </h2>
+
+      <div class="gold-line-center"></div>
+
+      <p style="max-width:800px;margin:0 auto;color:rgba(255,255,255,.7);line-height:1.8;">
+        Join the Veritas Centre for Policy Research Foundation and contribute to meaningful work in public policy, governance, law, research, technology, publications, outreach, and institutional development.
+      </p>
+    </div>
+
+    <div class="internship-container reveal">
+
+      <!-- Internship Poster -->
+      <div class="internship-image-wrapper">
+        <img
+          src="CFI/CFI.jpeg"
+          alt="VCPRF Internship Programme 2026"
+          class="internship-image"
+          onclick="openInternshipModal()"
+        >
+      </div>
+
+      <!-- Content -->
+      <div class="internship-content">
+
+        <div class="internship-buttons">
+
+          <a
+            href="https://forms.gle/Qn57TVMySGzHWKfFA"
+            target="_blank"
+            class="btn-primary">
+            Apply Through Form
+          </a>
+
+          <a
+            href="mailto:veritascprf@gmail.com?cc=setu.r@nlumeg.ac.in&subject=Internship%20Application%20-%20[Role]%20-%20[Your%20Name]"
+            class="btn-outline">
+            Apply Through Email
+          </a>
+
+        </div>
+
+        <div class="internship-info-box">
+          <strong>Application Deadline:</strong> 20 June 2026
+          <br>
+          <strong>Internship Period:</strong> July 2026
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- Internship Modal -->
+<div id="internshipModal" class="internship-modal">
+
+  <div class="internship-modal-content">
+
+    <span class="close-modal" onclick="closeInternshipModal()">&times;</span>
+
+    <h3>Apply for Internship</h3>
+
+    <div class="modal-card">
+
+      <h4>Option 1 — Apply Through Form</h4>
+
+      <input
+        type="text"
+        id="formLink"
+        readonly
+        value="https://forms.gle/Qn57TVMySGzHWKfFA">
+
+      <button onclick="copyText('formLink')" class="btn-primary">
+        Copy Form Link
+      </button>
+
+    </div>
+
+    <div class="modal-card">
+
+      <h4>Option 2 — Apply Through Email</h4>
+
+      <input
+        type="text"
+        id="emailAddress"
+        readonly
+        value="veritascprf@gmail.com">
+
+      <button onclick="copyText('emailAddress')" class="btn-primary">
+        Copy Email
+      </button>
+
+      <br><br>
+
+      <input
+        type="text"
+        id="subjectLine"
+        readonly
+        value="Internship Application - [Role] - [Your Name]">
+
+      <button onclick="copyText('subjectLine')" class="btn-outline">
+        Copy Subject
+      </button>
+
+      <p style="margin-top:15px;">
+        CC: setu.r@nlumeg.ac.in
+      </p>
+
+    </div>
+
+  </div>
+
+</div>
 <!-- ================================================================
      CTA STRIP
 ================================================================ -->
@@ -355,7 +483,37 @@
     </div>
   </div>
 </footer>
+<script>
 
+function openInternshipModal(){
+    document.getElementById('internshipModal').style.display='block';
+}
+
+function closeInternshipModal(){
+    document.getElementById('internshipModal').style.display='none';
+}
+
+window.onclick=function(event){
+    const modal=document.getElementById('internshipModal');
+
+    if(event.target===modal){
+        modal.style.display='none';
+    }
+}
+
+function copyText(id){
+
+    const field=document.getElementById(id);
+
+    field.select();
+    field.setSelectionRange(0,99999);
+
+    navigator.clipboard.writeText(field.value);
+
+    alert("Copied successfully!");
+}
+
+</script>
 <script src="shared.js"></script>
 </body>
 </html>
