@@ -12,213 +12,735 @@
   <link rel="stylesheet" href="shared.css"/>
 
   <style>
-    /* ── Publication category cards ───────────────────────── */
-    .pub-cat-card {
-      background: white;
-      border: 1px solid rgba(200,169,81,.16);
-      border-top: 3px solid rgba(200,169,81,.35);
-      padding: 32px 28px;
-      border-radius: 3px;
-      transition: border-top-color .3s, box-shadow .3s, transform .3s;
-    }
-    .pub-cat-card:hover {
-      border-top-color: var(--gold);
-      box-shadow: 0 10px 32px rgba(11,31,58,.1);
-      transform: translateY(-3px);
-    }
-    .dark .pub-cat-card {
-      background: var(--navy-mid);
-      border-color: rgba(200,169,81,.1);
-      border-top-color: rgba(200,169,81,.3);
-    }
-    .dark .pub-cat-card:hover {
-      box-shadow: 0 10px 32px rgba(0,0,0,.35);
-    }
+/* ================================================================
+   PUBLICATIONS PAGE — MASTER STYLESHEET
+================================================================ */
 
-    .pub-type-icon {
-      width: 48px; height: 48px;
-      background: rgba(200,169,81,.07);
-      border: 1px solid rgba(200,169,81,.28);
-      border-radius: 2px;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--gold);
-      margin-bottom: 20px;
-    }
+/* ── STICKY SIDE NAV ── */
+#pub-sidenav {
+  position: fixed;
+  right: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .4s ease;
+}
+#pub-sidenav.visible { opacity: 1; pointer-events: auto; }
+.psn-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-end;
+  cursor: pointer;
+  text-decoration: none;
+}
+.psn-label {
+  font-family: 'Lato', sans-serif;
+  font-size: .52rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: rgba(200,169,81,.45);
+  opacity: 0;
+  transform: translateX(6px);
+  transition: opacity .2s ease, transform .2s ease, color .2s ease;
+  white-space: nowrap;
+}
+.psn-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(200,169,81,.3);
+  flex-shrink: 0;
+  transition: background .25s, transform .25s;
+}
+.psn-item:hover .psn-label,
+.psn-item.psn-active .psn-label {
+  opacity: 1;
+  transform: translateX(0);
+  color: var(--gold, #C8A951);
+}
+.psn-item:hover .psn-dot,
+.psn-item.psn-active .psn-dot {
+  background: var(--gold, #C8A951);
+  transform: scale(1.4);
+}
+@media (max-width: 1100px) { #pub-sidenav { display: none; } }
 
-    /* ── Featured publication card ────────────────────────── */
-    .featured-pub {
-      background: white;
-      border: 1px solid rgba(200,169,81,.2);
-      border-left: 4px solid var(--gold);
-      border-radius: 3px;
-      overflow: hidden;
-      transition: box-shadow .3s;
-    }
-    .featured-pub:hover {
-      box-shadow: 0 12px 40px rgba(11,31,58,.1);
-    }
-    .dark .featured-pub {
-      background: var(--navy-mid);
-      border-color: rgba(200,169,81,.15);
-      border-left-color: var(--gold);
-    }
+/* ── IMPACT STRIP ── */
+.impact-strip {
+  background: var(--offwhite, #f8f5ef);
+  border-bottom: 1px solid rgba(200,169,81,.12);
+  position: relative;
+}
+.dark .impact-strip {
+  background: #07121f;
+  border-bottom-color: rgba(200,169,81,.1);
+}
+.impact-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  divide-x: rgba(200,169,81,.18);
+}
+@media (max-width: 640px) { .impact-inner { grid-template-columns: repeat(2, 1fr); } }
+.impact-item {
+  padding: 28px 24px;
+  text-align: center;
+  border-right: 1px solid rgba(200,169,81,.14);
+  position: relative;
+  cursor: default;
+  transition: background .25s;
+}
+.impact-item:last-child { border-right: none; }
+.impact-item:hover { background: rgba(200,169,81,.03); }
+.impact-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--navy, #0B1F3A);
+  line-height: 1;
+  display: block;
+  letter-spacing: -.02em;
+}
+.dark .impact-num { color: #e8dfc8; }
+.impact-unit {
+  color: var(--gold, #C8A951);
+}
+.impact-desc {
+  font-family: 'Lato', sans-serif;
+  font-size: .58rem;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--text-muted, #6b7a8d);
+  margin-top: 6px;
+  display: block;
+}
 
-    .pub-status-bar {
-      background: linear-gradient(135deg, #0d2040 0%, #0B1F3A 100%);
-      padding: 14px 32px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 10px;
-      border-bottom: 1px solid rgba(200,169,81,.12);
-    }
+/* ── PUBLICATION CATEGORIES ── */
+.pub-cat-card {
+  background: white;
+  border: 1px solid rgba(200,169,81,.16);
+  border-top: 3px solid rgba(200,169,81,.35);
+  padding: 32px 28px;
+  border-radius: 3px;
+  transition: border-top-color .3s, box-shadow .3s, transform .3s;
+}
+.pub-cat-card:hover {
+  border-top-color: var(--gold, #C8A951);
+  box-shadow: 0 10px 32px rgba(11,31,58,.1);
+  transform: translateY(-3px);
+}
+.dark .pub-cat-card {
+  background: var(--navy-mid, #0d2040);
+  border-color: rgba(200,169,81,.1);
+  border-top-color: rgba(200,169,81,.3);
+}
+.dark .pub-cat-card:hover { box-shadow: 0 10px 32px rgba(0,0,0,.35); }
+.pub-type-icon {
+  width: 48px; height: 48px;
+  background: rgba(200,169,81,.07);
+  border: 1px solid rgba(200,169,81,.28);
+  border-radius: 2px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold, #C8A951);
+  margin-bottom: 20px;
+}
 
-    .tag-pill {
-      display: inline-flex;
-      align-items: center;
-      font-family: 'Lato', sans-serif;
-      font-size: .6rem;
-      font-weight: 700;
-      letter-spacing: .13em;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      border-radius: 20px;
-      background: rgba(200,169,81,.1);
-      color: var(--gold);
-      border: 1px solid rgba(200,169,81,.22);
-      margin: 2px 3px 2px 0;
-    }
+/* ── FEATURED RESEARCH THEMES ── */
+.themes-section {
+  background: linear-gradient(160deg, #0d2040, #0B1F3A 55%, #0a1a2e);
+  position: relative; overflow: hidden;
+}
+.themes-section::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(200,169,81,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200,169,81,.025) 1px, transparent 1px);
+  background-size: 56px 56px;
+  pointer-events: none;
+}
+.themes-inner {
+  max-width: 1280px; margin: 0 auto; padding: 72px 24px;
+  position: relative; z-index: 1;
+}
+.themes-header {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px; margin-bottom: 40px;
+}
+.themes-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 700; color: white; margin: 0;
+}
+.themes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+@media (max-width: 800px) { .themes-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .themes-grid { grid-template-columns: 1fr; } }
+.theme-tile {
+  border: 1px solid rgba(200,169,81,.16);
+  border-radius: 3px;
+  padding: 28px 22px;
+  position: relative;
+  overflow: hidden;
+  background: rgba(255,255,255,.03);
+  transition: border-color .3s, background .3s, transform .3s;
+}
+.theme-tile:hover {
+  border-color: rgba(200,169,81,.4);
+  background: rgba(200,169,81,.04);
+  transform: translateY(-2px);
+}
+.theme-tile::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(200,169,81,.5), transparent);
+  opacity: 0;
+  transition: opacity .3s;
+}
+.theme-tile:hover::before { opacity: 1; }
+.theme-icon {
+  width: 36px; height: 36px;
+  border: 1px solid rgba(200,169,81,.25);
+  border-radius: 2px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold, #C8A951);
+  margin-bottom: 14px;
+}
+.theme-label {
+  font-family: 'Lato', sans-serif;
+  font-size: .55rem; font-weight: 700;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: rgba(200,169,81,.6); margin-bottom: 6px;
+  display: block;
+}
+.theme-title {
+  font-family: 'Playfair Display', serif;
+  font-size: .98rem; font-weight: 600;
+  color: white; line-height: 1.3;
+}
+.theme-num {
+  position: absolute; bottom: 16px; right: 18px;
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem; font-weight: 400;
+  color: rgba(200,169,81,.06); line-height: 1;
+  pointer-events: none; user-select: none;
+}
 
-    .pub-block {
-      padding: 10px 0 20px;
-      border-bottom: 1px solid rgba(200,169,81,.1);
-      margin-bottom: 4px;
-    }
-    .pub-block:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-    .pub-block-label {
-      font-family: 'Lato', sans-serif;
-      font-size: .6rem;
-      font-weight: 700;
-      letter-spacing: .22em;
-      text-transform: uppercase;
-      color: rgba(200,169,81,.7);
-      margin-bottom: 10px;
-    }
+/* ── RECENT PUBLICATIONS SECTION ── */
+.rp2-section {
+  background: var(--offwhite, #f8f5ef);
+  padding: 0; position: relative; overflow: hidden;
+}
+.dark .rp2-section { background: #07121f; }
+.rp2-section::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(11,31,58,.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(11,31,58,.02) 1px, transparent 1px);
+  background-size: 52px 52px; pointer-events: none;
+}
+.dark .rp2-section::before {
+  background-image:
+    linear-gradient(rgba(200,169,81,.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200,169,81,.022) 1px, transparent 1px);
+}
+.rp2-inner { max-width: 1280px; margin: 0 auto; padding: 88px 24px 96px; }
 
-    .citation-box {
-      background: rgba(200,169,81,.04);
-      border: 1px solid rgba(200,169,81,.14);
-      border-radius: 2px;
-      padding: 16px 18px;
-    }
-    .dark .citation-box {
-      background: rgba(255,255,255,.03);
-    }
+.rp2-header {
+  display: flex; align-items: flex-end;
+  justify-content: space-between; flex-wrap: wrap; gap: 16px;
+  margin-bottom: 48px;
+}
+.rp2-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: 'Lato', sans-serif; font-size: .55rem; font-weight: 700;
+  letter-spacing: .26em; text-transform: uppercase;
+  color: var(--gold, #C8A951); background: rgba(200,169,81,.07);
+  border: 1px solid rgba(200,169,81,.2); padding: 4px 12px;
+  border-radius: 20px; margin-bottom: 14px;
+}
+.rp2-badge-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold, #C8A951); flex-shrink: 0; }
+.rp2-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.7rem, 2.8vw, 2.3rem); font-weight: 700;
+  color: var(--navy, #0B1F3A); line-height: 1.2; margin: 0 0 10px;
+}
+.dark .rp2-header h2 { color: #e8dfc8; }
+.rp2-header-sub {
+  font-family: 'EB Garamond', serif; font-style: italic; font-size: 1rem;
+  color: var(--text-muted, #6b7a8d); line-height: 1.6; max-width: 460px; margin: 0;
+}
+.dark .rp2-header-sub { color: rgba(200,210,230,.56); }
+.rp2-gold-line { width: 40px; height: 2px; background: var(--gold, #C8A951); margin: 12px 0 14px; }
+.rp2-count-block { text-align: right; flex-shrink: 0; }
+.rp2-count-num {
+  font-family: 'Playfair Display', serif; font-size: 2.8rem; font-weight: 400;
+  color: rgba(200,169,81,.15); line-height: 1; display: block; letter-spacing: -.02em;
+}
+.dark .rp2-count-num { color: rgba(200,169,81,.12); }
+.rp2-count-label {
+  font-family: 'Lato', sans-serif; font-size: .55rem; font-weight: 700;
+  letter-spacing: .22em; text-transform: uppercase;
+  color: rgba(200,169,81,.65); display: block; margin-top: 4px;
+}
 
-    /* sidebar sticky only on large screens */
-    @media (min-width: 1024px) {
-      .pub-sidebar { position: sticky; top: 88px; }
-    }
+/* ── HORIZONTAL MARQUEE ── */
+.rp2-marquee-wrap {
+  position: relative; width: 100%; overflow: hidden; margin-bottom: 48px;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+}
+.rp2-marquee-track {
+  display: flex; flex-direction: row; gap: 20px;
+  width: max-content;
+  animation: marqueeSlide 34s linear infinite;
+  will-change: transform;
+}
+.rp2-marquee-wrap:hover .rp2-marquee-track { animation-play-state: paused; }
+@keyframes marqueeSlide {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.rp2-cover {
+  display: block; flex-shrink: 0; width: 148px;
+  border-radius: 3px; overflow: hidden;
+  border: 1px solid rgba(200,169,81,.2);
+  box-shadow: 0 4px 14px rgba(11,31,58,.1), 0 0 0 .5px rgba(200,169,81,.08);
+  position: relative; text-decoration: none;
+  transition: transform .32s cubic-bezier(.25,.46,.45,.94), box-shadow .32s ease;
+}
+.rp2-cover:hover {
+  transform: translateY(-5px) scale(1.022);
+  box-shadow: 0 14px 36px rgba(11,31,58,.16), 0 0 0 1px rgba(200,169,81,.38);
+}
+.rp2-cover img {
+  width: 100%; height: auto; display: block;
+  aspect-ratio: 3 / 4; object-fit: cover; object-position: top center;
+  transition: transform .4s cubic-bezier(.25,.46,.45,.94);
+}
+.rp2-cover:hover img { transform: scale(1.038); }
+/* cover overlay on hover */
+.rp2-cover-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(11,31,58,.88) 0%, rgba(11,31,58,.1) 50%, transparent 100%);
+  opacity: 0; transition: opacity .3s ease;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 10px;
+}
+.rp2-cover:hover .rp2-cover-overlay { opacity: 1; }
+.rp2-cover-overlay-type {
+  font-family: 'Lato', sans-serif; font-size: .48rem; font-weight: 700;
+  letter-spacing: .15em; text-transform: uppercase;
+  color: var(--gold, #C8A951); margin-bottom: 4px;
+}
+.rp2-cover-overlay-title {
+  font-family: 'Playfair Display', serif; font-size: .72rem; font-weight: 600;
+  color: white; line-height: 1.3;
+}
+.rp2-cover::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold, #C8A951), transparent);
+  opacity: 0; transition: opacity .3s ease;
+}
+.rp2-cover:hover::after { opacity: 1; }
 
-    /* responsive 2-col inside featured pub */
-    .fp-grid {
-      display: grid;
-      grid-template-columns: 1fr 300px;
-      gap: 40px;
-      align-items: start;
-    }
-    @media (max-width: 900px) {
-      .fp-grid { grid-template-columns: 1fr; }
-      .pub-sidebar { position: static; }
-    }
+/* ── SEARCH & FILTER ── */
+.pub-search-wrap { margin-bottom: 28px; }
+.pub-search-inner {
+  display: flex; align-items: center;
+  border: 1px solid rgba(200,169,81,.22); border-radius: 3px;
+  background: white; overflow: hidden;
+  transition: border-color .25s, box-shadow .25s;
+}
+.dark .pub-search-inner {
+  background: var(--navy-mid, #0d2040);
+  border-color: rgba(200,169,81,.18);
+}
+.pub-search-inner:focus-within {
+  border-color: var(--gold, #C8A951);
+  box-shadow: 0 0 0 3px rgba(200,169,81,.1);
+}
+.pub-search-icon {
+  padding: 0 14px; color: rgba(200,169,81,.5); flex-shrink: 0;
+  display: flex; align-items: center;
+}
+.pub-search-input {
+  flex: 1; border: none; outline: none; padding: 11px 0;
+  font-family: 'Lato', sans-serif; font-size: .84rem;
+  background: transparent; color: var(--navy, #0B1F3A);
+}
+.dark .pub-search-input { color: #e8dfc8; }
+.pub-search-input::placeholder { color: var(--text-muted, #6b7a8d); font-style: italic; font-size: .82rem; }
+.pub-clear-btn {
+  padding: 0 14px; cursor: pointer; border: none; background: none;
+  color: var(--text-muted, #6b7a8d); display: none; align-items: center;
+  transition: color .2s;
+}
+.pub-clear-btn:hover { color: var(--gold, #C8A951); }
+.pub-clear-btn.visible { display: flex; }
 
-    /* title/meta row */
-    .fp-title-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 20px;
-      align-items: start;
-      margin-bottom: 24px;
-    }
-    @media (max-width: 600px) {
-      .fp-title-row { grid-template-columns: 1fr; }
-      .fp-doc-icon  { display: none; }
-      .pub-status-bar { padding: 12px 20px; }
-      .featured-pub-body { padding: 24px 20px !important; }
-    }
+.pub-filter-chips {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px;
+}
+.pub-chip {
+  font-family: 'Lato', sans-serif; font-size: .58rem; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase;
+  padding: 6px 14px; border-radius: 20px; cursor: pointer; border: none;
+  background: rgba(11,31,58,.06); color: var(--text-muted, #6b7a8d);
+  border: 1px solid rgba(11,31,58,.1);
+  transition: background .22s, color .22s, border-color .22s;
+}
+.dark .pub-chip {
+  background: rgba(200,169,81,.07);
+  color: rgba(200,210,230,.55);
+  border-color: rgba(200,169,81,.14);
+}
+.pub-chip:hover { border-color: rgba(200,169,81,.35); color: var(--gold, #C8A951); }
+.pub-chip.active {
+  background: var(--gold, #C8A951); color: var(--navy, #0B1F3A);
+  border-color: var(--gold, #C8A951);
+}
+.pub-chip:focus-visible { outline: 2px solid var(--gold, #C8A951); outline-offset: 2px; }
 
-    /* PDF Modal */
-    #pdfModal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.82);
-      z-index: 9998;
-      align-items: center;
-      justify-content: center;
-    }
-    #pdfModal.open { display: flex; }
+/* ── PUBLICATION LIST ── */
+.rp2-list-label {
+  font-family: 'Lato', sans-serif; font-size: .57rem; font-weight: 700;
+  letter-spacing: .26em; text-transform: uppercase;
+  color: rgba(200,169,81,.65); margin-bottom: 24px;
+  display: flex; align-items: center; gap: 14px;
+}
+.rp2-list-label::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, rgba(200,169,81,.3), transparent);
+}
+.rp2-list { display: flex; flex-direction: column; }
+.rp2-entry {
+  display: grid;
+  grid-template-columns: 44px 3px 1fr auto;
+  gap: 0 20px; align-items: center;
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(200,169,81,.1);
+  opacity: 0; transform: translateY(14px);
+  transition: opacity .5s cubic-bezier(.25,.46,.45,.94), transform .5s cubic-bezier(.25,.46,.45,.94);
+  position: relative;
+}
+.rp2-entry.rp2-visible { opacity: 1; transform: translateY(0); }
+.rp2-entry:first-child { padding-top: 0; }
+.rp2-entry:last-child { border-bottom: none; }
+/* Row bg glow on hover */
+.rp2-entry::before {
+  content: ''; position: absolute; inset: 0;
+  background: rgba(200,169,81,.0);
+  transition: background .28s ease;
+  pointer-events: none;
+}
+.rp2-entry:hover::before { background: rgba(200,169,81,.025); }
+.dark .rp2-entry:hover::before { background: rgba(200,169,81,.04); }
 
-    .modal-inner {
-      position: relative;
-      width: 92vw;
-      height: 90vh;
-      max-width: 1100px;
-      background: #0B1F3A;
-      border: 1px solid rgba(200,169,81,.2);
-      border-radius: 4px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-    .modal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 20px;
-      border-bottom: 1px solid rgba(200,169,81,.15);
-      flex-shrink: 0;
-    }
-    .modal-title {
-      font-family: 'Playfair Display', serif;
-      font-size: .9rem;
-      font-weight: 600;
-      color: white;
-      line-height: 1.3;
-    }
-    .modal-close {
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      border: 1px solid rgba(200,169,81,.3);
-      background: transparent;
-      color: var(--gold);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      font-size: 1rem;
-      line-height: 1;
-      flex-shrink: 0;
-      margin-left: 16px;
-      transition: background .25s;
-    }
-    .modal-close:hover { background: rgba(200,169,81,.12); }
-    .modal-inner iframe {
-      flex: 1;
-      width: 100%;
-      border: none;
-    }
+/* Entry number */
+.rp2-entry-num {
+  font-family: 'Playfair Display', serif; font-size: .72rem; font-weight: 400;
+  color: rgba(200,169,81,.4); letter-spacing: .04em; text-align: center;
+  line-height: 1; align-self: flex-start; padding-top: 2px;
+}
+
+/* Animated left bar */
+.rp2-bar {
+  width: 3px; background: rgba(200,169,81,.18); border-radius: 3px;
+  transition: background .28s ease; align-self: stretch;
+}
+.rp2-entry:hover .rp2-bar { background: var(--gold, #C8A951); }
+
+/* Entry content */
+.rp2-entry-inner { min-width: 0; }
+.rp2-type {
+  display: inline-block; font-family: 'Lato', sans-serif; font-size: .52rem;
+  font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--gold, #C8A951); background: rgba(200,169,81,.07);
+  border: 1px solid rgba(200,169,81,.2); padding: 3px 8px;
+  border-radius: 2px; margin-bottom: 7px;
+}
+.rp2-title {
+  font-family: 'Playfair Display', serif; font-size: clamp(.9rem, 1.4vw, 1.02rem);
+  font-weight: 600; color: var(--navy, #0B1F3A);
+  line-height: 1.32; margin-bottom: 0;
+  transition: color .22s; transform: translateX(0); 
+  transition: color .22s, transform .22s cubic-bezier(.25,.46,.45,.94);
+}
+.dark .rp2-title { color: #e8dfc8; }
+.rp2-entry:hover .rp2-title { color: var(--gold, #C8A951); transform: translateX(3px); }
+
+/* Actions */
+.rp2-actions { display: flex; gap: 9px; flex-wrap: wrap; flex-shrink: 0; align-items: center; }
+.rp2-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: 'Lato', sans-serif; font-size: .58rem; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase; text-decoration: none;
+  padding: 7px 13px; border-radius: 2px;
+  transition: background .22s, transform .18s, box-shadow .22s; cursor: pointer; border: none;
+}
+.rp2-btn-p { background: var(--gold, #C8A951); color: var(--navy, #0B1F3A); }
+.rp2-btn-p:hover { background: #e8c055; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(200,169,81,.28); }
+.rp2-btn-o { background: transparent; color: var(--gold, #C8A951); border: 1px solid rgba(200,169,81,.3); }
+.rp2-btn-o:hover { background: rgba(200,169,81,.08); transform: translateY(-1px); }
+.rp2-btn:focus-visible { outline: 2px solid var(--gold, #C8A951); outline-offset: 2px; }
+
+/* Empty state */
+.pub-empty {
+  display: none; text-align: center; padding: 48px 24px;
+}
+.pub-empty.visible { display: block; }
+.pub-empty-title {
+  font-family: 'Playfair Display', serif; font-size: 1.1rem;
+  color: var(--navy, #0B1F3A); margin-bottom: 8px;
+}
+.dark .pub-empty-title { color: #e8dfc8; }
+.pub-empty-sub {
+  font-family: 'EB Garamond', serif; font-style: italic;
+  font-size: .95rem; color: var(--text-muted, #6b7a8d); margin-bottom: 20px;
+}
+
+/* ── RESEARCH TIMELINE ── */
+.timeline-section {
+  background: var(--offwhite, #f8f5ef);
+  border-top: 1px solid rgba(200,169,81,.1);
+}
+.dark .timeline-section { background: #07121f; }
+.timeline-inner {
+  max-width: 1280px; margin: 0 auto; padding: 72px 24px;
+}
+.timeline-header { margin-bottom: 40px; }
+.timeline-header h2 {
+  font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 700; color: var(--navy, #0B1F3A); margin: 12px 0 0;
+}
+.dark .timeline-header h2 { color: #e8dfc8; }
+.timeline-body { display: flex; flex-direction: column; gap: 0; }
+.timeline-year-block { display: grid; grid-template-columns: 80px 1fr; gap: 0 32px; }
+.timeline-year {
+  font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 600;
+  color: var(--gold, #C8A951); padding: 0 0 0 0; line-height: 1;
+  text-align: right; padding-top: 3px;
+}
+.timeline-connector {
+  display: flex; flex-direction: column;
+}
+.timeline-connector-line-wrap {
+  display: flex; align-items: flex-start; gap: 0;
+  position: relative;
+}
+.timeline-vline {
+  width: 1px; background: rgba(200,169,81,.25); flex-shrink: 0;
+  margin: 0 20px; position: relative;
+}
+.timeline-vline::before {
+  content: ''; position: absolute; top: 0; left: -4px;
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--gold, #C8A951); border: 2px solid var(--offwhite, #f8f5ef);
+}
+.dark .timeline-vline::before { border-color: #07121f; }
+.timeline-entries { padding-bottom: 32px; padding-top: 0; }
+.timeline-entry {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 9px 0; border-bottom: 1px solid rgba(200,169,81,.07);
+}
+.timeline-entry:first-child { padding-top: 0; }
+.timeline-entry:last-child { border-bottom: none; }
+.timeline-entry-dot {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: rgba(200,169,81,.5); flex-shrink: 0; margin-top: 6px;
+}
+.timeline-entry-text {
+  font-family: 'Lato', sans-serif; font-size: .84rem;
+  color: var(--text-body, #3a4a5c); line-height: 1.5;
+}
+.dark .timeline-entry-text { color: rgba(200,210,230,.7); }
+
+/* ── RESEARCH ACCESS ── */
+.access-strip {
+  background: var(--offwhite, #f8f5ef);
+  border-top: 1px solid rgba(200,169,81,.1);
+  border-bottom: 1px solid rgba(200,169,81,.1);
+}
+.dark .access-strip { background: #07121f; }
+.access-inner {
+  max-width: 1280px; margin: 0 auto; padding: 40px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 24px; flex-wrap: wrap;
+}
+.access-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'Lato', sans-serif; font-size: .6rem; font-weight: 700;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: #1a7f4f; background: rgba(26,127,79,.08);
+  border: 1px solid rgba(26,127,79,.22); padding: 6px 14px; border-radius: 20px;
+  flex-shrink: 0;
+}
+.access-badge-dot { width: 7px; height: 7px; border-radius: 50%; background: #1a7f4f; flex-shrink: 0; }
+.access-text {
+  font-family: 'EB Garamond', serif; font-style: italic; font-size: 1rem;
+  color: var(--text-muted, #6b7a8d); line-height: 1.65; max-width: 600px;
+}
+.dark .access-text { color: rgba(200,210,230,.55); }
+
+/* ── RESEARCH NETWORK ── */
+.network-section {
+  background: var(--offwhite, #f8f5ef);
+  border-top: 1px solid rgba(200,169,81,.1);
+}
+.dark .network-section { background: #07121f; }
+.network-inner { max-width: 1280px; margin: 0 auto; padding: 64px 24px; }
+.network-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 36px; }
+.network-header h2 {
+  font-family: 'Playfair Display', serif; font-size: clamp(1.4rem, 2.2vw, 1.8rem);
+  font-weight: 700; color: var(--navy, #0B1F3A); margin: 10px 0 0;
+}
+.dark .network-header h2 { color: #e8dfc8; }
+.network-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+@media (max-width: 800px) { .network-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .network-grid { grid-template-columns: 1fr; } }
+.network-card {
+  border: 1px solid rgba(200,169,81,.14);
+  border-radius: 3px; padding: 24px 20px;
+  background: white;
+  transition: transform .28s, box-shadow .28s, border-color .28s;
+}
+.network-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(11,31,58,.08);
+  border-color: rgba(200,169,81,.35);
+}
+.dark .network-card {
+  background: var(--navy-mid, #0d2040);
+  border-color: rgba(200,169,81,.1);
+}
+.dark .network-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,.35); }
+.network-icon {
+  width: 36px; height: 36px;
+  border: 1px solid rgba(200,169,81,.25); border-radius: 2px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold, #C8A951); margin-bottom: 12px;
+}
+.network-card-title {
+  font-family: 'Playfair Display', serif; font-size: .95rem; font-weight: 600;
+  color: var(--navy, #0B1F3A); margin-bottom: 6px;
+}
+.dark .network-card-title { color: #e8dfc8; }
+.network-card-sub {
+  font-family: 'Lato', sans-serif; font-size: .76rem;
+  color: var(--text-muted, #6b7a8d); line-height: 1.5;
+}
+
+/* ── LINKEDIN SECTION ── */
+.li-section {
+  background: linear-gradient(160deg, #0d2040, #0B1F3A 55%, #0a1a2e);
+  position: relative; overflow: hidden;
+}
+.li-section::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(200,169,81,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200,169,81,.025) 1px, transparent 1px);
+  background-size: 60px 60px; pointer-events: none;
+}
+.li-section::after {
+  content: ''; position: absolute; top: -30%; right: -10%;
+  width: 460px; height: 460px;
+  background: radial-gradient(circle, rgba(200,169,81,.05), transparent 70%);
+  pointer-events: none;
+}
+.li-inner {
+  max-width: 1280px; margin: 0 auto; padding: 72px 24px;
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 40px; align-items: center; position: relative; z-index: 1;
+}
+@media (max-width: 720px) {
+  .li-inner { grid-template-columns: 1fr; text-align: center; }
+  .li-btn-wrap { justify-content: center; }
+}
+.li-label {
+  font-family: 'Lato', sans-serif; font-size: .56rem; font-weight: 700;
+  letter-spacing: .26em; text-transform: uppercase;
+  color: rgba(200,169,81,.65); margin-bottom: 14px;
+}
+.li-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.6rem, 2.8vw, 2.1rem); font-weight: 700;
+  color: white; line-height: 1.2; margin-bottom: 14px;
+}
+.li-gold-line { width: 40px; height: 2px; background: var(--gold, #C8A951); margin-bottom: 16px; }
+.li-text {
+  font-family: 'EB Garamond', serif; font-style: italic; font-size: 1.05rem;
+  color: rgba(255,255,255,.58); line-height: 1.75; max-width: 520px;
+}
+.li-features {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px;
+}
+.li-feature {
+  font-family: 'Lato', sans-serif; font-size: .56rem; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: rgba(200,169,81,.7); background: rgba(200,169,81,.07);
+  border: 1px solid rgba(200,169,81,.18); padding: 4px 10px; border-radius: 2px;
+}
+.li-btn-wrap { display: flex; align-items: flex-start; flex-shrink: 0; padding-top: 4px; }
+.li-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: 'Lato', sans-serif; font-size: .72rem; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase; text-decoration: none;
+  padding: 14px 26px; border-radius: 2px;
+  background: var(--gold, #C8A951); color: var(--navy, #0B1F3A);
+  transition: background .28s, transform .2s, box-shadow .28s;
+  border: none; white-space: nowrap;
+}
+.li-btn:hover { background: #e8c055; transform: translateY(-2px); box-shadow: 0 6px 24px rgba(200,169,81,.35); }
+.li-btn:focus-visible { outline: 2px solid #e8c055; outline-offset: 3px; }
+.li-btn svg { flex-shrink: 0; }
+
+/* ── GLOBAL REDUCE MOTION ── */
+@media (prefers-reduced-motion: reduce) {
+  .rp2-marquee-track { animation: none !important; }
+  .rp2-entry, .theme-tile, .network-card, .timeline-entry { transition: none !important; opacity: 1 !important; transform: none !important; }
+  .rp2-cover, .rp2-cover img, .rp2-btn, .pub-chip, .rp2-title { transition: none !important; }
+}
   </style>
 </head>
 <body>
 
 <!-- PAGE TRANSITION OVERLAY -->
-<div id="page-transition">
-  <div class="pt-emblem">Satye Pratishitam Sodham</div>
-</div>
+<div id="page-transition"><div class="pt-emblem">Satye Pratishitam Sodham</div></div>
 
+<!-- STICKY SIDE NAV -->
+<nav id="pub-sidenav" aria-label="Page sections">
+  <a class="psn-item" href="#section-categories"  onclick="smoothTo(event,'section-categories')">
+    <span class="psn-label">Categories</span><span class="psn-dot"></span>
+  </a>
+  <a class="psn-item" href="#section-themes"      onclick="smoothTo(event,'section-themes')">
+    <span class="psn-label">Research Themes</span><span class="psn-dot"></span>
+  </a>
+  <a class="psn-item" href="#section-archive"     onclick="smoothTo(event,'section-archive')">
+    <span class="psn-label">Archive</span><span class="psn-dot"></span>
+  </a>
+  <a class="psn-item" href="#section-timeline"    onclick="smoothTo(event,'section-timeline')">
+    <span class="psn-label">Timeline</span><span class="psn-dot"></span>
+  </a>
+  <a class="psn-item" href="#section-linkedin"    onclick="smoothTo(event,'section-linkedin')">
+    <span class="psn-label">Connect</span><span class="psn-dot"></span>
+  </a>
+</nav>
 
 <!-- ================================================================
      NAVBAR
@@ -226,16 +748,10 @@
 <nav id="vcprf-nav">
   <div class="nav-top-line gold-divider"></div>
   <div class="nav-inner">
-
     <a href="index.html" class="nav-logo" data-transition>
-      <img src="logo.png" alt="VCPRF Logo"
-           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-      <div class="nav-logo-fallback" style="display:none;">
-        <div class="logo-box"><span>V</span></div>
-        <div class="logo-text"><p>VCPRF</p><p>Policy Research</p></div>
-      </div>
+      <img src="images/logo.png" alt="VCPRF Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="nav-logo-fallback" style="display:none;"><div class="logo-box"><span>V</span></div><div class="logo-text"><p>VCPRF</p><p>Policy Research</p></div></div>
     </a>
-
     <div class="nav-links">
       <a href="index.html"        class="nav-link" data-page="index.html"        data-transition>Home</a>
       <a href="about.html"        class="nav-link" data-page="about.html"        data-transition>About</a>
@@ -243,25 +759,16 @@
       <a href="initiatives.html"  class="nav-link" data-page="initiatives.html"  data-transition>Initiatives</a>
       <a href="publications.html" class="nav-link" data-page="publications.html" data-transition>Publications</a>
       <a href="contact.html"      class="nav-link" data-page="contact.html"      data-transition>Contact</a>
-      <a href="our-team.html"      class="nav-link" data-page="our-team.html"      data-transition>Our Team</a>
     </div>
-
     <div class="nav-controls">
       <button class="theme-btn" aria-label="Toggle dark mode">
-        <svg class="icon-moon" width="15" height="15" fill="currentColor" viewBox="0 0 16 16">
-          <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/>
-        </svg>
-        <svg class="icon-sun" width="15" height="15" fill="currentColor" viewBox="0 0 16 16" style="display:none;">
-          <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707z"/>
-        </svg>
+        <svg class="icon-moon" width="15" height="15" fill="currentColor" viewBox="0 0 16 16"><path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/></svg>
+        <svg class="icon-sun"  width="15" height="15" fill="currentColor" viewBox="0 0 16 16" style="display:none;"><path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707z"/></svg>
       </button>
       <a href="contact.html" class="btn-primary nav-cta" data-transition style="font-size:.7rem;padding:10px 20px;">Collaborate With Us</a>
-      <button class="hamburger-btn" id="hamburger-btn" aria-label="Open menu">
-        <span></span><span></span><span></span>
-      </button>
+      <button class="hamburger-btn" id="hamburger-btn" aria-label="Open menu"><span></span><span></span><span></span></button>
     </div>
   </div>
-
   <div class="mobile-menu" id="mobile-menu">
     <a href="index.html"        class="nav-link" data-transition>Home</a>
     <a href="about.html"        class="nav-link" data-transition>About</a>
@@ -269,11 +776,9 @@
     <a href="initiatives.html"  class="nav-link" data-transition>Initiatives</a>
     <a href="publications.html" class="nav-link" data-transition>Publications</a>
     <a href="contact.html"      class="nav-link" data-transition>Contact</a>
-    <a href="our-team.html"      class="nav-link" data-transition>Our Team</a>
     <a href="contact.html" class="btn-primary" data-transition style="text-align:center;margin-top:8px;">Collaborate With Us</a>
   </div>
 </nav>
-
 
 <!-- ================================================================
      INNER HERO
@@ -283,299 +788,406 @@
   <div class="hero-radial"></div>
   <div class="corner-fl tr"></div>
   <div class="watermark">Works</div>
-
   <div class="inner-hero-content">
     <div class="inner-hero-breadcrumb">
-      <a href="index.html" data-transition>Home</a>
-      <span>›</span>
+      <a href="index.html" data-transition>Home</a><span>›</span>
       <span style="color:var(--gold);">Publications</span>
     </div>
     <h1 class="h-animate h-a1">Publications &amp; Scholarly Output</h1>
-    <p class="sub wide h-animate h-a2">
-      Rigorous research outputs spanning policy papers, institutional reports, and peer-reviewed journals — advancing evidence-based governance discourse.
-    </p>
+    <p class="sub wide h-animate h-a2">Rigorous research outputs spanning policy papers, institutional reports, and peer-reviewed journals — advancing evidence-based governance discourse.</p>
   </div>
 </section>
 
-<hr class="gold-hr"/>
+<!-- ================================================================
+     RESEARCH IMPACT STRIP
+================================================================ -->
+<div class="impact-strip">
+  <div class="impact-inner">
+    <div class="impact-item">
+      <span class="impact-num">04</span>
+      <span class="impact-desc">Publications</span>
+    </div>
+    <div class="impact-item">
+      <span class="impact-num">03</span>
+      <span class="impact-desc">Research Domains</span>
+    </div>
+    <div class="impact-item">
+      <span class="impact-num">2026<span class="impact-unit" style="font-size:1rem;"></span></span>
+      <span class="impact-desc">Latest Publication</span>
+    </div>
+    <div class="impact-item">
+      <span class="impact-num">100<span class="impact-unit">%</span></span>
+      <span class="impact-desc">Open Access</span>
+    </div>
+  </div>
+</div>
 
+<hr class="gold-hr"/>
 
 <!-- ================================================================
      SECTION 1 — PUBLICATION CATEGORIES
 ================================================================ -->
-<section style="background:var(--offwhite);">
+<section style="background:var(--offwhite);" id="section-categories">
   <div class="section-wrap">
-
     <div class="section-header reveal">
       <span class="section-label">Scholarly Output</span>
       <h2 style="margin-top:12px;">Publication Categories</h2>
       <div class="gold-line-left"></div>
       <p>Our publications span three formats, each designed for a specific audience and purpose within the policy research ecosystem.</p>
     </div>
-
     <div class="grid-3" style="gap:24px;">
-
-      <!-- Policy Papers -->
       <div class="pub-cat-card reveal reveal-d1">
-        <div class="pub-type-icon">
-          <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-          </svg>
-        </div>
+        <div class="pub-type-icon"><svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg></div>
         <span class="section-label" style="display:block;margin-bottom:10px;">Policy Papers</span>
         <h3 style="font-family:'Playfair Display',serif;font-size:1.18rem;font-weight:600;color:var(--navy);margin-bottom:12px;">Policy Papers</h3>
-        <p style="font-family:'Lato',sans-serif;font-size:.84rem;line-height:1.72;color:var(--text-muted);margin-bottom:20px;">
-          Concise analytical papers addressing specific governance and policy questions. Aimed at practitioners, administrators, and legislators requiring structured, evidence-based guidance on contemporary issues.
-        </p>
+        <p style="font-family:'Lato',sans-serif;font-size:.84rem;line-height:1.72;color:var(--text-muted);margin-bottom:20px;">Concise analytical papers addressing specific governance and policy questions. Aimed at practitioners, administrators, and legislators requiring structured, evidence-based guidance on contemporary issues.</p>
         <div style="border-top:1px solid rgba(200,169,81,.12);padding-top:18px;">
           <p style="font-family:'Lato',sans-serif;font-size:.74rem;color:var(--text-muted);margin-bottom:10px;letter-spacing:.02em;">Typical length: 3,000 – 8,000 words</p>
           <span class="status-badge badge-gold"><span class="dot-gold"></span>Available</span>
         </div>
       </div>
-
-      <!-- Research Reports -->
       <div class="pub-cat-card reveal reveal-d2">
-        <div class="pub-type-icon">
-          <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-          </svg>
-        </div>
+        <div class="pub-type-icon"><svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
         <span class="section-label" style="display:block;margin-bottom:10px;">Research Reports</span>
         <h3 style="font-family:'Playfair Display',serif;font-size:1.18rem;font-weight:600;color:var(--navy);margin-bottom:12px;">Research Reports</h3>
-        <p style="font-family:'Lato',sans-serif;font-size:.84rem;line-height:1.72;color:var(--text-muted);margin-bottom:20px;">
-          Comprehensive reports on thematic areas of governance, institutional design, and regulatory reform. These in-depth studies provide sustained analysis suitable for academic and institutional reference.
-        </p>
+        <p style="font-family:'Lato',sans-serif;font-size:.84rem;line-height:1.72;color:var(--text-muted);margin-bottom:20px;">Comprehensive reports on thematic areas of governance, institutional design, and regulatory reform. These in-depth studies provide sustained analysis suitable for academic and institutional reference.</p>
         <div style="border-top:1px solid rgba(200,169,81,.12);padding-top:18px;">
           <p style="font-family:'Lato',sans-serif;font-size:.74rem;color:var(--text-muted);margin-bottom:10px;letter-spacing:.02em;">Typical length: 15,000 – 40,000 words</p>
           <span class="status-badge badge-muted">Under Development</span>
         </div>
       </div>
-
-      <!-- Journals -->
       <div class="pub-cat-card reveal reveal-d3">
-        <div class="pub-type-icon">
-          <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
-          </svg>
-        </div>
+        <div class="pub-type-icon"><svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg></div>
         <span class="section-label" style="display:block;margin-bottom:10px;">Journals</span>
         <h3 style="font-family:'Playfair Display',serif;font-size:1.18rem;font-weight:600;color:var(--navy);margin-bottom:12px;">Journals</h3>
-        <p style="font-family:'Lato',sans-serif;font-size:.84rem;line-height:1.72;color:var(--text-muted);margin-bottom:20px;">
-          Peer-reviewed academic journals covering constitutional law, governance studies, and public policy. Published periodically, these journals provide a forum for rigorous scholarly contributions.
-        </p>
+        <p style="font-family:'Lato',sans-serif;font-size:.84rem;line-height:1.72;color:var(--text-muted);margin-bottom:20px;">Peer-reviewed academic journals covering constitutional law, governance studies, and public policy. Published periodically, these journals provide a forum for rigorous scholarly contributions.</p>
         <div style="border-top:1px solid rgba(200,169,81,.12);padding-top:18px;">
           <p style="font-family:'Lato',sans-serif;font-size:.74rem;color:var(--text-muted);margin-bottom:10px;letter-spacing:.02em;">Periodic publication</p>
           <span class="status-badge badge-muted">To Be Released</span>
         </div>
       </div>
-
     </div>
   </div>
 </section>
 
 <hr class="gold-hr"/>
 
+<!-- ================================================================
+     FEATURED RESEARCH THEMES
+================================================================ -->
+<section class="themes-section" id="section-themes">
+  <div class="themes-inner">
+    <div class="themes-header reveal">
+      <div>
+        <span class="section-label" style="color:rgba(200,169,81,.7);">Thematic Expertise</span>
+        <h2 style="color:white;margin-top:10px;">Featured Research Themes</h2>
+      </div>
+      <div style="width:40px;height:2px;background:var(--gold);align-self:flex-end;margin-bottom:6px;"></div>
+    </div>
+    <div class="themes-grid">
+      <div class="theme-tile reveal reveal-d1">
+        <div class="theme-icon"><svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
+        <span class="theme-label">Domain</span>
+        <p class="theme-title">Artificial Intelligence &amp; Governance</p>
+        <span class="theme-num">01</span>
+      </div>
+      <div class="theme-tile reveal reveal-d2">
+        <div class="theme-icon"><svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg></div>
+        <span class="theme-label">Domain</span>
+        <p class="theme-title">Judicial Innovation &amp; Access to Justice</p>
+        <span class="theme-num">02</span>
+      </div>
+      <div class="theme-tile reveal reveal-d3">
+        <div class="theme-icon"><svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+        <span class="theme-label">Domain</span>
+        <p class="theme-title">Consumer Protection &amp; Digital Rights</p>
+        <span class="theme-num">03</span>
+      </div>
+      <div class="theme-tile reveal reveal-d4">
+        <div class="theme-icon"><svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
+        <span class="theme-label">Domain</span>
+        <p class="theme-title">Digital Governance &amp; Regulatory Policy</p>
+        <span class="theme-num">04</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="gold-hr"/>
 
 <!-- ================================================================
-     SECTION 2 — FEATURED PUBLICATION
+     RECENT PUBLICATIONS & POLICY BRIEFS
 ================================================================ -->
-<section style="background:var(--offwhite);">
-  <div class="section-wrap">
+<section class="rp2-section" aria-labelledby="rp2-heading" id="section-archive">
+  <div class="rp2-inner">
 
-    <div class="section-header reveal">
-      <span class="section-label">Featured Publication</span>
-      <h2 style="margin-top:12px;">Latest Release</h2>
-      <div class="gold-line-left"></div>
-      <p>An analysis of India's regulatory framework governing deceptive digital interface design.</p>
+    <header class="rp2-header reveal">
+      <div>
+        <div class="rp2-badge"><span class="rp2-badge-dot"></span>Research Archive</div>
+        <h2 id="rp2-heading">Recent Publications &amp; Policy Briefs</h2>
+        <div class="rp2-gold-line"></div>
+        <p class="rp2-header-sub">Explore VCPRF&#x2019;s latest policy briefs, consultation submissions, and governance research outputs.</p>
+      </div>
+      <div class="rp2-count-block" aria-hidden="true">
+        <span class="rp2-count-num">04</span>
+        <span class="rp2-count-label">Publications Available</span>
+      </div>
+    </header>
+
+    <!-- Horizontal marquee -->
+    <div class="rp2-marquee-wrap" role="presentation" aria-hidden="true">
+      <div class="rp2-marquee-track" id="rp2Track">
+        <!-- Set A -->
+        <a href="https://drive.google.com/file/d/1lotCbxTZQ2MFo1D8Rkz04-4lCAvlSxKN/view?usp=sharing" target="_blank" rel="noopener" class="rp2-cover" tabindex="-1">
+          <img src="indiaai.png" alt="India AI Governance Framework" loading="lazy"/>
+          <div class="rp2-cover-overlay"><span class="rp2-cover-overlay-type">Policy Brief</span><span class="rp2-cover-overlay-title">India AI Governance Framework</span></div>
+        </a>
+        <a href="https://drive.google.com/file/d/16zt7BlDFOnes081uxRAcV5u13LKiwa0v/view?usp=sharing" target="_blank" rel="noopener" class="rp2-cover" tabindex="-1">
+          <img src="janvishwas.png" alt="Jan Vishwas Policy Brief" loading="lazy"/>
+          <div class="rp2-cover-overlay"><span class="rp2-cover-overlay-type">Policy Brief</span><span class="rp2-cover-overlay-title">Jan Vishwas Policy Brief</span></div>
+        </a>
+        <a href="https://drive.google.com/file/d/1c67SJfafjBYT77l2zs1APAnOd9r5h8TD/view?usp=sharing" target="_blank" rel="noopener" class="rp2-cover" tabindex="-1">
+          <img src="scai.png" alt="Draft Regulations for AI in Courts, 2026" loading="lazy"/>
+          <div class="rp2-cover-overlay"><span class="rp2-cover-overlay-type">Consultation Report</span><span class="rp2-cover-overlay-title">AI in Courts, 2026</span></div>
+        </a>
+        <a href="https://drive.google.com/file/d/1nxkbSrmyTFGy1UjQNyOlIlZ18AAFPOmd/view?usp=sharing" target="_blank" rel="noopener" class="rp2-cover" tabindex="-1">
+          <img src="image2.png" alt="Guidelines for Prevention and Regulation of Dark Patterns, 2023" loading="lazy"/>
+          <div class="rp2-cover-overlay"><span class="rp2-cover-overlay-type">Policy Paper</span><span class="rp2-cover-overlay-title">Dark Patterns, 2023</span></div>
+        </a>
+        <!-- Set B -->
+        <a href="https://drive.google.com/file/d/1lotCbxTZQ2MFo1D8Rkz04-4lCAvlSxKN/view?usp=sharing" target="_blank" rel="noopener" class="rp2-cover" tabindex="-1" aria-hidden="true"><img src="indiaai.png" alt="" loading="lazy"/><div class="rp2-cover-overlay"><span class="rp2-cover-overlay-type">Policy Brief</span><span class="rp2-cover-overlay-title">India AI Governance Framework</span></div></a>
+        <a href="https://drive.google.com/file/d/16zt7BlDFOnes081uxRAcV5u13LKiwa0v/view?usp=sharing" target="_blank" rel="noopener" class="rp2-cover" tabindex="-1" aria-hidden="true"><img src="janvishwas.png" alt="" loading="lazy"/><div class="rp2-cover-overlay"><span class="rp2-cover-overlay-type">Policy Brief</span><span class="rp2-cover-overlay-title">Jan Vishwas Policy Brief</span></div></a>
+        <a href="https://drive.google.com/file/d/1c67SJfafjBYT77l2zs1APAnOd9r5h8TD/view?usp=sharing" target="_blank" rel="noopener" class="rp2-cover" tabindex="-1" aria-hidden="true"><img src="scai.png" alt="" loading="lazy"/><div class="rp2-cover-overlay"><span class="rp2-cover-overlay-type">Consultation Report</span><span class="rp2-cover-overlay-title">AI in Courts, 2026</span></div></a>
+        <a href="https://drive.google.com/file/d/1nxkbSrmyTFGy1UjQNyOlIlZ18AAFPOmd/view?usp=sharing" target="_blank" rel="noopener" class="rp2-cover" tabindex="-1" aria-hidden="true"><img src="image2.png" alt="" loading="lazy"/><div class="rp2-cover-overlay"><span class="rp2-cover-overlay-type">Policy Paper</span><span class="rp2-cover-overlay-title">Dark Patterns, 2023</span></div></a>
+      </div>
     </div>
 
-    <div class="featured-pub reveal">
+    <!-- Search -->
+    <div class="pub-search-wrap">
+      <div class="pub-search-inner">
+        <span class="pub-search-icon"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg></span>
+        <input id="pubSearch" class="pub-search-input" type="search" placeholder="Search publications, policy briefs, reports..." aria-label="Search publications"/>
+        <button id="pubClearBtn" class="pub-clear-btn" aria-label="Clear search">
+          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </div>
 
-      <!-- ── Status bar ── -->
-      <div class="pub-status-bar">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="width:7px;height:7px;border-radius:50%;background:var(--gold);"></div>
-          <span class="section-label" style="color:rgba(200,169,81,.7);">Policy Paper · Digital Governance</span>
+    <!-- Filter chips -->
+    <div class="pub-filter-chips" role="group" aria-label="Filter by publication type">
+      <button class="pub-chip active" data-filter="all"                  onclick="setFilter(this)">All</button>
+      <button class="pub-chip"        data-filter="policy-brief"         onclick="setFilter(this)">Policy Briefs</button>
+      <button class="pub-chip"        data-filter="policy-paper"         onclick="setFilter(this)">Policy Papers</button>
+      <button class="pub-chip"        data-filter="consultation-report"  onclick="setFilter(this)">Consultation Reports</button>
+    </div>
+
+    <!-- Publication directory label -->
+    <div class="rp2-list-label">Publication Directory</div>
+
+    <!-- List -->
+    <div class="rp2-list" role="list" aria-label="VCPRF Publications" id="pubList">
+
+      <article class="rp2-entry" role="listitem" data-rp2-entry data-type="policy-brief" data-title="india ai governance framework">
+        <span class="rp2-entry-num">#01</span>
+        <div class="rp2-bar" aria-hidden="true"></div>
+        <div class="rp2-entry-inner">
+          <span class="rp2-type">Policy Brief</span>
+          <h3 class="rp2-title">India AI Governance Framework</h3>
         </div>
-        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-          <span class="tag-pill">Consumer Protection</span>
-          <span class="tag-pill">Tech Policy</span>
-          <span class="tag-pill">Digital Platforms</span>
+        <div class="rp2-actions">
+          <a href="https://drive.google.com/file/d/1lotCbxTZQ2MFo1D8Rkz04-4lCAvlSxKN/view?usp=sharing" target="_blank" rel="noopener" class="rp2-btn rp2-btn-p" aria-label="View India AI Governance Framework"><svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>View Publication</a>
+          <a href="https://drive.google.com/file/d/1lotCbxTZQ2MFo1D8Rkz04-4lCAvlSxKN/view?usp=sharing" target="_blank" rel="noopener" class="rp2-btn rp2-btn-o" aria-label="Download India AI Governance Framework PDF"><svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Download PDF</a>
+        </div>
+      </article>
+
+      <article class="rp2-entry" role="listitem" data-rp2-entry data-type="policy-brief" data-title="jan vishwas policy brief">
+        <span class="rp2-entry-num">#02</span>
+        <div class="rp2-bar" aria-hidden="true"></div>
+        <div class="rp2-entry-inner">
+          <span class="rp2-type">Policy Brief</span>
+          <h3 class="rp2-title">Jan Vishwas Policy Brief</h3>
+        </div>
+        <div class="rp2-actions">
+          <a href="https://drive.google.com/file/d/16zt7BlDFOnes081uxRAcV5u13LKiwa0v/view?usp=sharing" target="_blank" rel="noopener" class="rp2-btn rp2-btn-p" aria-label="View Jan Vishwas Policy Brief"><svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>View Publication</a>
+          <a href="https://drive.google.com/file/d/16zt7BlDFOnes081uxRAcV5u13LKiwa0v/view?usp=sharing" target="_blank" rel="noopener" class="rp2-btn rp2-btn-o" aria-label="Download Jan Vishwas Policy Brief PDF"><svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Download PDF</a>
+        </div>
+      </article>
+
+      <article class="rp2-entry" role="listitem" data-rp2-entry data-type="consultation-report" data-title="draft regulations artificial intelligence courts 2026">
+        <span class="rp2-entry-num">#03</span>
+        <div class="rp2-bar" aria-hidden="true"></div>
+        <div class="rp2-entry-inner">
+          <span class="rp2-type">Consultation Report</span>
+          <h3 class="rp2-title">Draft Regulations for Use of Artificial Intelligence in Courts, 2026</h3>
+        </div>
+        <div class="rp2-actions">
+          <a href="https://drive.google.com/file/d/1c67SJfafjBYT77l2zs1APAnOd9r5h8TD/view?usp=sharing" target="_blank" rel="noopener" class="rp2-btn rp2-btn-p" aria-label="View AI Courts Consultation Report"><svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>View Publication</a>
+          <a href="https://drive.google.com/file/d/1c67SJfafjBYT77l2zs1APAnOd9r5h8TD/view?usp=sharing" target="_blank" rel="noopener" class="rp2-btn rp2-btn-o" aria-label="Download AI Courts Consultation Report PDF"><svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Download PDF</a>
+        </div>
+      </article>
+
+      <article class="rp2-entry" role="listitem" data-rp2-entry data-type="policy-paper" data-title="guidelines prevention regulation dark patterns 2023">
+        <span class="rp2-entry-num">#04</span>
+        <div class="rp2-bar" aria-hidden="true"></div>
+        <div class="rp2-entry-inner">
+          <span class="rp2-type">Policy Paper</span>
+          <h3 class="rp2-title">Guidelines for Prevention and Regulation of Dark Patterns, 2023</h3>
+        </div>
+        <div class="rp2-actions">
+          <a href="https://drive.google.com/file/d/1nxkbSrmyTFGy1UjQNyOlIlZ18AAFPOmd/view?usp=sharing" target="_blank" rel="noopener" class="rp2-btn rp2-btn-p" aria-label="View Dark Patterns Guidelines"><svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>View Publication</a>
+          <a href="https://drive.google.com/file/d/1nxkbSrmyTFGy1UjQNyOlIlZ18AAFPOmd/view?usp=sharing" target="_blank" rel="noopener" class="rp2-btn rp2-btn-o" aria-label="Download Dark Patterns Guidelines PDF"><svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Download PDF</a>
+        </div>
+      </article>
+
+    </div><!-- /list -->
+
+    <!-- Empty state -->
+    <div class="pub-empty" id="pubEmpty" role="status" aria-live="polite">
+      <p class="pub-empty-title">No publications found.</p>
+      <p class="pub-empty-sub">Try another keyword or explore all research outputs.</p>
+      <button class="rp2-btn rp2-btn-p" onclick="resetFilters()" style="margin:0 auto;">Reset Filters</button>
+    </div>
+
+  </div>
+</section>
+
+<hr class="gold-hr"/>
+
+<!-- ================================================================
+     RESEARCH TIMELINE
+================================================================ -->
+<section class="timeline-section" id="section-timeline">
+  <div class="timeline-inner">
+    <div class="timeline-header reveal">
+      <span class="section-label">Publication History</span>
+      <h2>Research Timeline</h2>
+      <div style="width:40px;height:2px;background:var(--gold);margin-top:14px;"></div>
+    </div>
+    <div class="timeline-body reveal">
+      <div class="timeline-year-block">
+        <span class="timeline-year">2026</span>
+        <div class="timeline-connector">
+          <div class="timeline-vline"></div>
+          <div class="timeline-entries">
+            <div class="timeline-entry"><span class="timeline-entry-dot"></span><span class="timeline-entry-text">India AI Governance Framework</span></div>
+            <div class="timeline-entry"><span class="timeline-entry-dot"></span><span class="timeline-entry-text">Draft Regulations for Use of Artificial Intelligence in Courts</span></div>
+          </div>
         </div>
       </div>
-
-      <!-- ── Body ── -->
-      <div class="featured-pub-body" style="padding:36px 36px 32px;">
-
-        <!-- Title + doc icon -->
-        <div class="fp-title-row">
-          <div>
-            <h2 style="font-family:'Playfair Display',serif;font-size:clamp(1.3rem,2.5vw,1.75rem);font-weight:700;color:var(--navy);line-height:1.25;margin-bottom:14px;">
-              Guidelines for Prevention and Regulation of Dark Patterns, 2023
-            </h2>
-            <div style="display:flex;flex-wrap:wrap;gap:18px;font-family:'Lato',sans-serif;font-size:.77rem;color:var(--text-muted);">
-              <span style="display:flex;align-items:center;gap:6px;">
-                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                07 April 2026
-              </span>
-              <span style="display:flex;align-items:center;gap:6px;">
-                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
-                Policy Paper
-              </span>
-              <span style="display:flex;align-items:center;gap:6px;">
-                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-                Veritas Centre for Policy Research Foundation
-              </span>
-            </div>
-          </div>
-          <!-- Document visual icon -->
-          <div class="fp-doc-icon" style="width:60px;height:72px;background:linear-gradient(145deg,#0d2040,#0B1F3A);border:1px solid rgba(200,169,81,.22);border-radius:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg width="24" height="24" fill="none" stroke="var(--gold)" viewBox="0 0 24 24" style="opacity:.85;">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-            </svg>
-            <span style="font-family:'Lato',sans-serif;font-size:.5rem;font-weight:700;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-top:6px;">PDF</span>
+      <div class="timeline-year-block">
+        <span class="timeline-year">2025</span>
+        <div class="timeline-connector">
+          <div class="timeline-vline"></div>
+          <div class="timeline-entries">
+            <div class="timeline-entry"><span class="timeline-entry-dot"></span><span class="timeline-entry-text">Jan Vishwas Policy Brief</span></div>
           </div>
         </div>
+      </div>
+      <div class="timeline-year-block">
+        <span class="timeline-year">2023</span>
+        <div class="timeline-connector">
+          <div class="timeline-vline" style="background:transparent;"></div>
+          <div class="timeline-entries">
+            <div class="timeline-entry"><span class="timeline-entry-dot"></span><span class="timeline-entry-text">Guidelines for Prevention and Regulation of Dark Patterns</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <!-- Gold accent line -->
-        <div style="height:1px;background:linear-gradient(90deg,rgba(200,169,81,.5),transparent);margin-bottom:28px;"></div>
+<!-- ================================================================
+     RESEARCH ACCESS
+================================================================ -->
+<div class="access-strip">
+  <div class="access-inner reveal">
+    <div class="access-badge"><span class="access-badge-dot"></span>Open Access</div>
+    <p class="access-text">All VCPRF publications are freely accessible and may be cited for academic, policy, and research purposes subject to appropriate attribution.</p>
+  </div>
+</div>
 
-        <!-- Two-column: content + sidebar -->
-        <div class="fp-grid">
+<hr class="gold-hr"/>
 
-          <!-- LEFT: content blocks -->
-          <div>
-
-            <div class="pub-block">
-              <p class="pub-block-label">Abstract</p>
-              <p style="font-family:'EB Garamond',serif;font-size:1.05rem;line-height:1.85;color:var(--text-body);">
-                This publication examines the emergence and regulation of "dark patterns" within India's digital economy. It analyses the legal framework established under the 2023 Guidelines and evaluates their applicability across digital platforms, advertisers, and sellers. The study situates dark patterns within broader concerns of consumer autonomy, informed consent, and ethical interface design, offering a structured interpretation of regulatory intent and enforcement challenges.
-              </p>
-            </div>
-
-            <div class="pub-block">
-              <p class="pub-block-label">Overview</p>
-              <p style="font-family:'Lato',sans-serif;font-size:.88rem;line-height:1.82;color:var(--text-muted);">
-                The report provides a detailed breakdown of the thirteen recognised dark patterns — including false urgency, basket sneaking, drip pricing, and subscription traps. It highlights how these practices manipulate user decision-making and undermine market fairness. By integrating legal analysis with practical examples, the study contributes to ongoing discourse on platform accountability, regulatory design, and the future of digital consumer protection in India.
-              </p>
-            </div>
-
-            <div class="pub-block">
-              <p class="pub-block-label">Key Highlights</p>
-              <div style="display:flex;flex-direction:column;gap:10px;">
-                <div style="display:flex;align-items:flex-start;gap:10px;">
-                  <span class="check-box" style="margin-top:1px;"><svg width="8" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#C8A951" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                  <span style="font-family:'Lato',sans-serif;font-size:.86rem;color:var(--text-muted);line-height:1.6;">Legal definition and scope of dark patterns under Indian law</span>
-                </div>
-                <div style="display:flex;align-items:flex-start;gap:10px;">
-                  <span class="check-box" style="margin-top:1px;"><svg width="8" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#C8A951" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                  <span style="font-family:'Lato',sans-serif;font-size:.86rem;color:var(--text-muted);line-height:1.6;">Applicability under the Consumer Protection framework</span>
-                </div>
-                <div style="display:flex;align-items:flex-start;gap:10px;">
-                  <span class="check-box" style="margin-top:1px;"><svg width="8" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#C8A951" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                  <span style="font-family:'Lato',sans-serif;font-size:.86rem;color:var(--text-muted);line-height:1.6;">Structured analysis of all 13 recognised deceptive practices</span>
-                </div>
-                <div style="display:flex;align-items:flex-start;gap:10px;">
-                  <span class="check-box" style="margin-top:1px;"><svg width="8" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#C8A951" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                  <span style="font-family:'Lato',sans-serif;font-size:.86rem;color:var(--text-muted);line-height:1.6;">Regulatory implications for platforms, advertisers, and sellers</span>
-                </div>
-                <div style="display:flex;align-items:flex-start;gap:10px;">
-                  <span class="check-box" style="margin-top:1px;"><svg width="8" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#C8A951" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                  <span style="font-family:'Lato',sans-serif;font-size:.86rem;color:var(--text-muted);line-height:1.6;">Interface design ethics and consumer autonomy in digital markets</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="pub-block">
-              <p class="pub-block-label">Citation (APA)</p>
-              <div class="citation-box">
-                <p style="font-family:'EB Garamond',serif;font-size:.95rem;line-height:1.72;color:var(--text-muted);">
-                  Veritas Centre for Policy Research Foundation. (2026).
-                  <em>Guidelines for Prevention and Regulation of Dark Patterns, 2023.</em>
-                  VCPRF Policy Paper.
-                </p>
-              </div>
-            </div>
-
-          </div><!-- /left -->
-
-          <!-- RIGHT: sidebar -->
-          <div class="pub-sidebar" style="display:flex;flex-direction:column;gap:16px;">
-
-            <!-- Access buttons -->
-            <div style="background:linear-gradient(145deg,#0d2040,#0B1F3A);border:1px solid rgba(200,169,81,.15);border-radius:3px;padding:24px;">
-              <p style="font-family:'Lato',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,169,81,.65);margin-bottom:16px;">Access Document</p>
-              <div style="display:flex;flex-direction:column;gap:10px;">
-                <button id="previewBtn"
-                        style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:none;cursor:pointer;"
-                        class="btn-primary">
-                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                  Preview PDF
-                </button>
-                <a href="https://drive.google.com/file/d/1nxkbSrmyTFGy1UjQNyOlIlZ18AAFPOmd/view?usp=sharing"
-                   target="_blank" rel="noopener"
-                   class="btn-outline"
-                   style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;box-sizing:border-box;">
-                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                  Download PDF
-                </a>
-              </div>
-            </div>
-
-            <!-- Keywords -->
-            <div style="background:white;border:1px solid rgba(200,169,81,.16);border-radius:3px;padding:22px;">
-              <p style="font-family:'Lato',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,169,81,.65);margin-bottom:12px;">Keywords</p>
-              <div style="display:flex;flex-wrap:wrap;gap:6px;">
-                <span class="tag-pill" style="background:rgba(200,169,81,.06);color:var(--text-muted);border-color:rgba(200,169,81,.18);">Dark Patterns</span>
-                <span class="tag-pill" style="background:rgba(200,169,81,.06);color:var(--text-muted);border-color:rgba(200,169,81,.18);">Consumer Protection</span>
-                <span class="tag-pill" style="background:rgba(200,169,81,.06);color:var(--text-muted);border-color:rgba(200,169,81,.18);">Digital Platforms</span>
-                <span class="tag-pill" style="background:rgba(200,169,81,.06);color:var(--text-muted);border-color:rgba(200,169,81,.18);">UI/UX Ethics</span>
-                <span class="tag-pill" style="background:rgba(200,169,81,.06);color:var(--text-muted);border-color:rgba(200,169,81,.18);">E-Commerce</span>
-                <span class="tag-pill" style="background:rgba(200,169,81,.06);color:var(--text-muted);border-color:rgba(200,169,81,.18);">Digital Governance</span>
-                <span class="tag-pill" style="background:rgba(200,169,81,.06);color:var(--text-muted);border-color:rgba(200,169,81,.18);">India Policy</span>
-              </div>
-            </div>
-
-            <!-- Publisher blurb -->
-            <div style="background:rgba(200,169,81,.04);border:1px solid rgba(200,169,81,.13);border-radius:3px;padding:20px;">
-              <p style="font-family:'Lato',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,169,81,.65);margin-bottom:10px;">Published By</p>
-              <p style="font-family:'Playfair Display',serif;font-size:.9rem;font-weight:600;color:var(--navy);margin-bottom:4px;">VCPRF</p>
-              <p class="motto" style="font-size:.78rem;opacity:.7;margin-bottom:8px;">Satye Pratishitam Sodham</p>
-              <p style="font-family:'Lato',sans-serif;font-size:.76rem;line-height:1.6;color:var(--text-muted);">Veritas Centre for Policy Research Foundation.</p>
-            </div>
-
-          </div><!-- /sidebar -->
-
-        </div><!-- /fp-grid -->
-      </div><!-- /featured-pub-body -->
-    </div><!-- /featured-pub -->
-
+<!-- ================================================================
+     RESEARCH NETWORK
+================================================================ -->
+<section class="network-section">
+  <div class="network-inner">
+    <div class="network-header reveal">
+      <div>
+        <span class="section-label">Readership</span>
+        <h2>Research Network</h2>
+      </div>
+      <div style="width:40px;height:2px;background:var(--gold);align-self:flex-end;margin-bottom:4px;"></div>
+    </div>
+    <div class="network-grid">
+      <div class="network-card reveal reveal-d1">
+        <div class="network-icon"><svg width="17" height="17" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg></div>
+        <p class="network-card-title">Policy Researchers</p>
+        <p class="network-card-sub">Academic and institutional scholars engaged in governance and law.</p>
+      </div>
+      <div class="network-card reveal reveal-d2">
+        <div class="network-icon"><svg width="17" height="17" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg></div>
+        <p class="network-card-title">Legal Scholars</p>
+        <p class="network-card-sub">Constitutional and administrative law professionals and academics.</p>
+      </div>
+      <div class="network-card reveal reveal-d3">
+        <div class="network-icon"><svg width="17" height="17" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg></div>
+        <p class="network-card-title">Governance Professionals</p>
+        <p class="network-card-sub">Government officials, administrators, and regulatory practitioners.</p>
+      </div>
+      <div class="network-card reveal reveal-d4">
+        <div class="network-icon"><svg width="17" height="17" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg></div>
+        <p class="network-card-title">Students &amp; Fellows</p>
+        <p class="network-card-sub">Emerging researchers, law students, and early-career policy professionals.</p>
+      </div>
+    </div>
   </div>
 </section>
 
 <hr class="gold-hr"/>
 
+<!-- ================================================================
+     STAY CONNECTED — LINKEDIN
+================================================================ -->
+<section class="li-section" aria-labelledby="li-heading" id="section-linkedin">
+  <div class="li-inner">
+    <div class="reveal">
+      <p class="li-label">Join the Research Community</p>
+      <h2 class="li-heading" id="li-heading">Stay Connected With VCPRF</h2>
+      <div class="li-gold-line"></div>
+      <p class="li-text">Follow the Veritas Centre for Policy Research Foundation on LinkedIn for updates on publications, policy briefs, research initiatives, events, and institutional announcements.</p>
+      <div class="li-features" aria-label="What you will find on LinkedIn">
+        <span class="li-feature">Publications</span>
+        <span class="li-feature">Policy Discussions</span>
+        <span class="li-feature">Research Updates</span>
+        <span class="li-feature">Institutional Announcements</span>
+      </div>
+    </div>
+    <div class="li-btn-wrap reveal reveal-d2">
+      <a href="https://www.linkedin.com/company/veritas-centre-for-policy-research-foundation/" target="_blank" rel="noopener" class="li-btn" aria-label="Follow VCPRF on LinkedIn (opens in new tab)">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        Follow on LinkedIn
+      </a>
+    </div>
+  </div>
+</section>
 
 <!-- ================================================================
-     SECTION 3 — STAY INFORMED (dark)
+     STAY INFORMED
 ================================================================ -->
 <section class="dark-section">
   <div class="dark-section-grid"></div>
   <div class="section-wrap tight">
     <div style="max-width:560px;position:relative;z-index:10;" class="reveal">
       <span class="section-label" style="color:rgba(200,169,81,.7);">Stay Informed</span>
-      <h2 style="color:white;margin-top:14px;font-size:clamp(1.6rem,2.8vw,2.2rem);">
-        Receive Publications<br/>When They Launch
-      </h2>
+      <h2 style="color:white;margin-top:14px;font-size:clamp(1.6rem,2.8vw,2.2rem);">Receive Publications<br/>When They Launch</h2>
       <div class="gold-line-left"></div>
-      <p style="font-family:'EB Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(255,255,255,.58);line-height:1.75;margin-bottom:28px;">
-        To be notified when VCPRF publications are released, please contact us with your area of interest. We will ensure relevant outputs are shared with you directly.
-      </p>
+      <p style="font-family:'EB Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(255,255,255,.58);line-height:1.75;margin-bottom:28px;">To be notified when VCPRF publications are released, please contact us with your area of interest. We will ensure relevant outputs are shared with you directly.</p>
       <a href="contact.html" class="btn-primary" data-transition>Contact VCPRF</a>
     </div>
   </div>
 </section>
-
 
 <!-- ================================================================
      FOOTER
@@ -584,43 +1196,34 @@
   <div class="footer-top-line"></div>
   <div class="footer-inner">
     <div class="footer-grid">
-
       <div class="footer-brand">
-        <img src="logo.png" alt="VCPRF" style="height:36px;width:auto;opacity:.8;" onerror="this.style.display='none'"/>
+        <img src="images/logo.png" alt="VCPRF" style="height:36px;width:auto;opacity:.8;" onerror="this.style.display='none'"/>
         <p class="org-name">Veritas Centre for Policy Research Foundation</p>
         <p class="motto" style="font-size:.84rem;color:rgba(200,169,81,.6);">Satye Pratishitam Sodham</p>
         <p class="org-desc">An emerging policy think tank dedicated to rigorous analysis, evidence-based governance, and institutional impact.</p>
       </div>
-
       <div>
         <p class="footer-col-title">Quick Links</p>
         <div class="footer-links">
-          <a href="index.html"        data-transition>Home</a>
-          <a href="about.html"        data-transition>About VCPRF</a>
-          <a href="research.html"     data-transition>Research</a>
-          <a href="initiatives.html"  data-transition>Initiatives</a>
+          <a href="index.html" data-transition>Home</a>
+          <a href="about.html" data-transition>About VCPRF</a>
+          <a href="research.html" data-transition>Research</a>
+          <a href="initiatives.html" data-transition>Initiatives</a>
           <a href="publications.html" data-transition>Publications</a>
-          <a href="contact.html"      data-transition>Contact</a>
-          <a href="our-team.html"      data-transition>Our Team</a>
+          <a href="contact.html" data-transition>Contact</a>
         </div>
       </div>
-
       <div>
         <p class="footer-col-title">Contact</p>
         <div class="footer-contact-item">
-          <svg width="14" height="14" fill="none" stroke="#5a6a7c" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-          </svg>
+          <svg width="14" height="14" fill="none" stroke="#5a6a7c" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
           <a href="mailto:veritascprf@gmail.com">veritascprf@gmail.com</a>
         </div>
         <div class="footer-contact-item">
-          <svg width="14" height="14" fill="#5a6a7c" viewBox="0 0 24 24">
-            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-          </svg>
+          <svg width="14" height="14" fill="#5a6a7c" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
           <a href="https://www.linkedin.com/company/veritas-centre-for-policy-research-foundation/" target="_blank" rel="noopener">LinkedIn</a>
         </div>
       </div>
-
     </div>
     <div class="footer-bottom">
       <p>© 2026 Veritas Centre for Policy Research Foundation. All rights reserved.</p>
@@ -629,55 +1232,129 @@
   </div>
 </footer>
 
-
 <!-- ================================================================
-     PDF PREVIEW MODAL
-================================================================ -->
-<div id="pdfModal" role="dialog" aria-modal="true" aria-label="PDF Preview">
-  <div class="modal-inner">
-    <div class="modal-header">
-      <span class="modal-title">Guidelines for Prevention and Regulation of Dark Patterns, 2023 — VCPRF</span>
-      <button class="modal-close" id="closeModal" aria-label="Close preview">&#x2715;</button>
-    </div>
-    <iframe
-      src="https://drive.google.com/file/d/1nxkbSrmyTFGy1UjQNyOlIlZ18AAFPOmd/preview"
-      allow="autoplay"
-      title="Dark Patterns Guidelines PDF Preview">
-    </iframe>
-  </div>
-</div>
-
-
-<!-- ================================================================
-     SCRIPTS
+     JAVASCRIPT
 ================================================================ -->
 <script>
-  /* ── PDF Modal ─────────────────────────────────────────── */
-  const modal      = document.getElementById('pdfModal');
-  const previewBtn = document.getElementById('previewBtn');
-  const closeBtn   = document.getElementById('closeModal');
+(function () {
+  'use strict';
 
-  function openModal()  {
-    modal.classList.add('open');
-    document.body.style.overflow = 'hidden';
+  /* ── SCROLL REVEAL ── */
+  var revEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    var revIO = new IntersectionObserver(function (recs) {
+      recs.forEach(function (r) {
+        if (r.isIntersecting) { r.target.classList.add('visible'); revIO.unobserve(r.target); }
+      });
+    }, { threshold: 0.1 });
+    revEls.forEach(function (el) { revIO.observe(el); });
+  } else { revEls.forEach(function (el) { el.classList.add('visible'); }); }
+
+  /* ── STAGGERED ENTRY REVEAL ── */
+  var entries = document.querySelectorAll('[data-rp2-entry]');
+  if ('IntersectionObserver' in window) {
+    var entIO = new IntersectionObserver(function (recs) {
+      recs.forEach(function (r) {
+        if (r.isIntersecting) {
+          var i = Array.prototype.indexOf.call(entries, r.target);
+          r.target.style.transitionDelay = (i * 80) + 'ms';
+          r.target.classList.add('rp2-visible');
+          entIO.unobserve(r.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    entries.forEach(function (el) { entIO.observe(el); });
+  } else { entries.forEach(function (el) { el.classList.add('rp2-visible'); }); }
+
+  /* ── MARQUEE PAUSE ── */
+  var track = document.getElementById('rp2Track');
+  if (track) {
+    track.addEventListener('focusin',  function () { track.style.animationPlayState = 'paused'; });
+    track.addEventListener('focusout', function () { track.style.animationPlayState = 'running'; });
   }
-  function closeModal() {
-    modal.classList.remove('open');
-    document.body.style.overflow = '';
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (track) track.style.animation = 'none';
   }
 
-  previewBtn.addEventListener('click', openModal);
-  closeBtn.addEventListener('click', closeModal);
+  /* ── SEARCH & FILTER ── */
+  var searchInput  = document.getElementById('pubSearch');
+  var clearBtn     = document.getElementById('pubClearBtn');
+  var pubEmpty     = document.getElementById('pubEmpty');
+  var currentFilter = 'all';
+  var currentQuery  = '';
 
-  /* Close on backdrop click */
-  modal.addEventListener('click', function(e) {
-    if (e.target === modal) closeModal();
-  });
+  function filterPubs() {
+    var q = currentQuery.toLowerCase().trim();
+    var anyVisible = false;
+    entries.forEach(function (el) {
+      var title  = (el.getAttribute('data-title') || '').toLowerCase();
+      var type   = el.getAttribute('data-type') || '';
+      var matchQ = !q || title.indexOf(q) !== -1;
+      var matchF = currentFilter === 'all' || type === currentFilter;
+      var show   = matchQ && matchF;
+      el.style.display = show ? '' : 'none';
+      if (show) anyVisible = true;
+    });
+    pubEmpty.classList.toggle('visible', !anyVisible);
+  }
 
-  /* Close on Escape */
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
-  });
+  if (searchInput) {
+    searchInput.addEventListener('input', function () {
+      currentQuery = this.value;
+      clearBtn.classList.toggle('visible', currentQuery.length > 0);
+      filterPubs();
+    });
+  }
+  if (clearBtn) {
+    clearBtn.addEventListener('click', function () {
+      searchInput.value = ''; currentQuery = '';
+      clearBtn.classList.remove('visible');
+      filterPubs(); searchInput.focus();
+    });
+  }
+
+  window.setFilter = function (btn) {
+    document.querySelectorAll('.pub-chip').forEach(function (c) { c.classList.remove('active'); });
+    btn.classList.add('active');
+    currentFilter = btn.getAttribute('data-filter');
+    filterPubs();
+  };
+
+  window.resetFilters = function () {
+    searchInput.value = ''; currentQuery = '';
+    clearBtn.classList.remove('visible');
+    document.querySelectorAll('.pub-chip').forEach(function (c) { c.classList.remove('active'); });
+    document.querySelector('[data-filter="all"]').classList.add('active');
+    currentFilter = 'all'; filterPubs();
+  };
+
+  /* ── STICKY SIDE NAV ── */
+  var sideNav   = document.getElementById('pub-sidenav');
+  var sideItems = document.querySelectorAll('.psn-item');
+  var sections  = ['section-categories','section-themes','section-archive','section-timeline','section-linkedin'];
+  var secEls    = sections.map(function (id) { return document.getElementById(id); });
+
+  function updateSideNav() {
+    var scrollY = window.scrollY + window.innerHeight * 0.4;
+    var heroBottom = document.querySelector('.inner-hero').getBoundingClientRect().bottom + window.scrollY;
+    sideNav.classList.toggle('visible', window.scrollY > heroBottom);
+    var activeIdx = 0;
+    secEls.forEach(function (el, i) {
+      if (el && el.getBoundingClientRect().top + window.scrollY <= scrollY) { activeIdx = i; }
+    });
+    sideItems.forEach(function (item, i) { item.classList.toggle('psn-active', i === activeIdx); });
+  }
+
+  window.addEventListener('scroll', updateSideNav, { passive: true });
+  updateSideNav();
+
+  window.smoothTo = function (e, id) {
+    e.preventDefault();
+    var el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+})();
 </script>
 
 <script src="shared.js"></script>
