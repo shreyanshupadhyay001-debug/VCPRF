@@ -833,15 +833,15 @@
               aria-haspopup="dialog"
               onclick="openOppModal('workshop')">
         <div class="opp-card-media">
-          <span class="opp-card-badge">26 September 2026</span>
+          <span class="opp-card-badge">22 August 2026</span>
           <img src="moot-court-workshop.png"
-               alt="Poster for the VCPRF International Moot Court Workshop, learning international advocacy from the 2026 Philip C. Jessup Champions"
+               alt="Poster for the VCPRF International Moot Court Workshop, learning international advocacy from the 2026 Philip C. Jessup World Champions"
                loading="lazy"/>
           <span class="opp-card-hint">View Poster &#x2192;</span>
         </div>
         <div class="opp-card-body">
           <h3 class="opp-card-title">International Moot Court Workshop</h3>
-          <p class="opp-card-subtitle">Learn international advocacy from the 2026 Philip C. Jessup Champions.</p>
+          <p class="opp-card-subtitle">Learn international advocacy from the 2026 Philip C. Jessup World Champions.</p>
           <span class="opp-card-cta">View Details →</span>
         </div>
       </button>
@@ -984,6 +984,327 @@
     });
   })();
 </script>
+
+<hr class="gold-hr"/>
+<!-- ================================================================
+     CALL FOR EDITOR & BOARD — VCPRF JOURNAL
+================================================================ -->
+<style>
+  /* ── Scoped styles: .ceb-* prefix, no conflicts ── */
+  .ceb-section {
+    background: var(--offwhite, #f8f5ef);
+    position: relative;
+    overflow: hidden;
+  }
+  .ceb-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(11,31,58,.026) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(11,31,58,.026) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+  }
+  .dark .ceb-section::before {
+    background-image:
+      linear-gradient(rgba(200,169,81,.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,169,81,.03) 1px, transparent 1px);
+  }
+
+  /* ── Two-column grid ── */
+  .ceb-grid {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: 64px;
+    align-items: center;
+    padding: 80px 0;
+  }
+  @media (max-width: 900px) {
+    .ceb-grid { grid-template-columns: 1fr; gap: 40px; padding: 56px 0; }
+  }
+  @media (max-width: 560px) {
+    .ceb-grid { padding: 44px 0; gap: 32px; }
+  }
+
+  /* ── Document icon panel ── */
+  .ceb-doc-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+  .ceb-doc-card {
+    width: 100%;
+    max-width: 300px;
+    background: var(--navy, #0B1F3A);
+    border: 1px solid rgba(200,169,81,.25);
+    border-radius: 4px;
+    padding: 36px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    box-shadow:
+      0 0 0 1px rgba(200,169,81,.12),
+      0 16px 48px rgba(11,31,58,.22),
+      0 4px 12px rgba(11,31,58,.1);
+    transition: transform .32s cubic-bezier(.25,.46,.45,.94), box-shadow .32s ease;
+    text-decoration: none;
+  }
+  .ceb-doc-card:hover {
+    transform: translateY(-5px);
+    box-shadow:
+      0 0 0 1.5px rgba(200,169,81,.45),
+      0 26px 60px rgba(11,31,58,.3),
+      0 8px 20px rgba(11,31,58,.14);
+  }
+  /* Gold shimmer on hover */
+  .ceb-doc-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, rgba(200,169,81,.8) 40%, #e8c055 60%, transparent);
+    opacity: 0;
+    transition: opacity .32s ease;
+    border-radius: 0 0 4px 4px;
+  }
+  .ceb-doc-card { position: relative; }
+  .ceb-doc-card:hover::after { opacity: 1; }
+
+  .ceb-doc-icon {
+    width: 64px; height: 64px;
+    background: rgba(200,169,81,.1);
+    border: 1px solid rgba(200,169,81,.3);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold, #C8A951);
+  }
+  .ceb-doc-label {
+    font-family: 'Lato', sans-serif;
+    font-size: .56rem;
+    font-weight: 700;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: rgba(200,169,81,.7);
+    margin-bottom: 4px;
+  }
+  .ceb-doc-title {
+    font-family: 'Playfair Display', serif;
+    font-size: .95rem;
+    font-weight: 700;
+    color: white;
+    line-height: 1.4;
+  }
+  .ceb-doc-hint {
+    font-family: 'Lato', sans-serif;
+    font-size: .6rem;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--gold, #C8A951);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  /* ── Badge ── */
+  .ceb-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Lato', sans-serif;
+    font-size: .57rem;
+    font-weight: 700;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--gold, #C8A951);
+    background: rgba(200,169,81,.07);
+    border: 1px solid rgba(200,169,81,.25);
+    padding: 5px 13px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+  .ceb-badge-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--gold, #C8A951);
+    flex-shrink: 0;
+  }
+
+  /* ── Role tags ── */
+  .ceb-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin: 16px 0 20px;
+  }
+  .ceb-tag {
+    font-family: 'Lato', sans-serif;
+    font-size: .58rem;
+    font-weight: 700;
+    letter-spacing: .11em;
+    text-transform: uppercase;
+    color: var(--text-muted, #6b7a8d);
+    background: rgba(11,31,58,.05);
+    border: 1px solid rgba(11,31,58,.09);
+    padding: 4px 10px;
+    border-radius: 2px;
+  }
+  .dark .ceb-tag {
+    color: rgba(200,210,230,.58);
+    background: rgba(200,169,81,.06);
+    border-color: rgba(200,169,81,.14);
+  }
+
+  /* ── Highlight note ── */
+  .ceb-note {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-size: .97rem;
+    color: var(--text-muted, #6b7a8d);
+    line-height: 1.72;
+    padding: 13px 16px;
+    border-left: 2px solid rgba(200,169,81,.42);
+    background: rgba(200,169,81,.04);
+    border-radius: 0 2px 2px 0;
+    margin: 20px 0 22px;
+  }
+  .dark .ceb-note {
+    color: rgba(200,210,230,.62);
+    background: rgba(200,169,81,.04);
+  }
+
+  /* ── Button row ── */
+  .ceb-btn-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+  }
+
+  /* ── Closing line ── */
+  .ceb-footer-note {
+    font-family: 'Lato', sans-serif;
+    font-size: .8rem;
+    color: var(--text-muted, #6b7a8d);
+    line-height: 1.72;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(200,169,81,.13);
+  }
+  .dark .ceb-footer-note { color: rgba(200,210,230,.52); }
+</style>
+
+<section class="ceb-section" aria-labelledby="ceb-heading">
+  <div class="section-wrap">
+    <div class="ceb-grid">
+
+      <!-- LEFT: Document icon card -->
+      <div class="reveal" style="display:flex;justify-content:center;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:14px;width:100%;max-width:300px;">
+          <a href="https://drive.google.com/file/d/1SVei4IYk57Uhh5yv3qR_2eqvF3Hg1xcI/view?usp=sharing"
+             target="_blank"
+             rel="noopener"
+             class="ceb-doc-card"
+             aria-label="View the VCPRF Call for Editor & Board document (opens in new tab)">
+            <div class="ceb-doc-icon">
+              <!-- Document icon -->
+              <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
+            </div>
+            <div>
+              <p class="ceb-doc-label">Official Notice · VCPRF</p>
+              <p class="ceb-doc-title">Call for Editor &amp; Board Members</p>
+            </div>
+            <span class="ceb-doc-hint">
+              <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+              </svg>
+              View Full Document
+            </span>
+          </a>
+        </div>
+      </div>
+
+      <!-- RIGHT: Content -->
+      <div class="reveal reveal-d1">
+
+        <!-- Live badge -->
+        <div class="ceb-badge">
+          <span class="ceb-badge-dot"></span>
+          Open Call · Now Accepting Applications
+        </div>
+
+        <span class="section-label">Institutional Announcement</span>
+
+        <h2 id="ceb-heading" style="margin-top:12px;font-size:clamp(1.45rem,2.5vw,2rem);line-height:1.22;">
+          Call for Editor &amp; Board Members<br/>
+          <em style="color:var(--gold);font-style:italic;">VCPRF Journal / Publication</em>
+        </h2>
+
+        <div class="gold-line-left"></div>
+
+        <!-- Role tags -->
+        <div class="ceb-tags" role="list" aria-label="Open positions">
+          <span class="ceb-tag" role="listitem">Editor-in-Chief</span>
+          <span class="ceb-tag" role="listitem">Associate Editor</span>
+          <span class="ceb-tag" role="listitem">Editorial Board</span>
+          <span class="ceb-tag" role="listitem">Advisory Board</span>
+          <span class="ceb-tag" role="listitem">Open Application</span>
+        </div>
+
+        <!-- Description -->
+        <p style="font-family:'EB Garamond',serif;font-size:1.04rem;line-height:1.82;color:var(--text-body);">
+          The Veritas Centre for Policy Research Foundation (VCPRF) invites applications from qualified scholars, legal professionals, policy experts, and researchers to serve on the editorial and advisory board of its forthcoming journal and publication initiative. This is an opportunity to contribute to shaping independent, rigorous, and interdisciplinary policy discourse in India.
+        </p>
+
+        <!-- Italicised note -->
+        <div class="ceb-note">
+          VCPRF welcomes applications from academics, legal scholars, governance professionals, and practitioners committed to evidence-based policy research and institutional knowledge creation.
+        </div>
+
+        <!-- CTA buttons -->
+        <div class="ceb-btn-row">
+          <a href="https://forms.gle/4tiZ7wG4tscbKvse7"
+             target="_blank"
+             rel="noopener"
+             class="btn-primary"
+             aria-label="Submit your application — opens Google Form in new tab">
+            Submit Application
+          </a>
+          <a href="https://drive.google.com/file/d/1SVei4IYk57Uhh5yv3qR_2eqvF3Hg1xcI/view?usp=sharing"
+             target="_blank"
+             rel="noopener"
+             class="btn-outline"
+             aria-label="View the full call for applications document — opens in new tab">
+            View Full Document
+          </a>
+          <a href="research.html"
+             class="btn-ghost"
+             data-transition>
+            Our Research
+          </a>
+        </div>
+
+        <!-- Closing institutional line -->
+        <p class="ceb-footer-note">
+          This call reflects VCPRF&#x2019;s commitment to building an independent, scholar-led publication infrastructure for Indian policy research.
+        </p>
+
+      </div>
+
+    </div>
+  </div>
+</section>
 
 <hr class="gold-hr"/>
 <!-- ================================================================
